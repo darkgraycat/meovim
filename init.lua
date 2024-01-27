@@ -12,7 +12,6 @@ local meov = {
 
 -- define globals
 vim.g.mapleader = " "
-
 -- define options
 local settings = {
   termguicolors = true,
@@ -60,6 +59,80 @@ vim.fn.sign_define("DiagnosticSignWarn", { text = " ", texthl = "DiagnosticSi
 vim.fn.sign_define("DiagnosticSignInfo", { text = " ", texthl = "DiagnosticSignInfo" })
 vim.fn.sign_define("DiagnosticSignHint", { text = "󰌵", texthl = "DiagnosticSignHint" })
 
+-- bootstrap package manager
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+-- lsp
+local lsps = { "lua_ls", "tsserver", "rust_analyzer" }
+
+-- install and config plugins
+require"lazy".setup({
+  { "nvim-lua/plenary.nvim" },
+  { 
+    "nvim-telescope/telescope.nvim",
+    config = function()
+      require"telescope".setup({
+				defaults = {
+					wrap_results = false,
+					path_display = { "smart" },
+					file_ignore_patterns = { "node_modules/.*", "build/.*", "dist/.*" },
+				},
+        pickers = {
+          find_files            = { layout_strategy = "horizontal" },
+          live_grep             = { layout_strategy = "horizontal" },
+          buffers               = { layout_strategy = "vertical" },
+          diagnostics           = { layout_strategy = "vertical", theme = "ivy" },
+          git_status            = { layout_strategy = "vertical" }, 
+    			lsp_references        = { theme = "cursor", jump_type = "never" },
+					lsp_definitions       = { theme = "cursor", jump_type = "never" },
+					lsp_document_symbols  = { theme = "dropdown" },
+        },
+      })
+    end
+  },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    config = function()
+      require"nvim-treesitter.configs".setup({
+        sync_install = false,
+        ensure_installed = { "lua", "vimdoc", "javascript", "typescript", "rust" },
+        highlight = { enable = true },
+        autopairs = { enable = true },
+        autotag = { enable = true },
+        indent = { enable = true },
+      })
+    end,
+  },
+  {"hrsh7th/cmp-nvim-lsp"},
+  {"hrsh7th/nvim-cmp"},
+  {"L3MON4D3/LuaSnip"},
+  {
+   "neovim/nvim-lspconfig",
+    config = function()
+      local lspconfig = require("lspconfig")
+      for _, lsp in ipairs(lsps) do
+        lspconfig[server].setup{ capabilities = require("cmp_nvim_lsp").default_capabilities() }
+      end
+    end,
+  },
+  { "folke/tokyonight.nvim",    name = "tokyonight" },
+}, {})
+
+-- setup colorscheme
+vim.cmd.colorscheme("tokyonight-night")
+
 -- setup general keymaps
 meov.keymap(
   -- yank to global
@@ -84,64 +157,6 @@ meov.keymap(
   { { "n", "v", "i" }, "<C-z>", "<Esc>" }
 )
 
--- bootstrap package manager
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git",
-    "clone",
-    "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", -- latest stable release
-    lazypath,
-  })
-end
-vim.opt.rtp:prepend(lazypath)
-
--- install and config plugins
-require("lazy").setup({
-  { "nvim-lua/plenary.nvim" },
-  { 
-    "nvim-telescope/telescope.nvim",
-    config = function()
-      require("telescope").setup({
-				defaults = {
-					wrap_results = false,
-					path_display = { "smart" },
-					file_ignore_patterns = { "node_modules/.*", "build/.*", "dist/.*" },
-				},
-        pickers = {
-          find_files            = { layout_strategy = "horizontal" },
-          live_grep             = { layout_strategy = "horizontal" },
-          buffers               = { layout_strategy = "vertical" },
-          diagnostics           = { layout_strategy = "vertical", theme = "ivy" },
-          git_status            = { layout_strategy = "vertical" }, 
-    			lsp_references        = { theme = "cursor", jump_type = "never" },
-					lsp_definitions       = { theme = "cursor", jump_type = "never" },
-					lsp_document_symbols  = { theme = "dropdown" },
-        },
-      })
-    end
-  },
-  {
-    "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
-    config = function()
-      require("nvim-treesitter.configs").setup({
-        sync_install = false,
-        ensure_installed = { "lua", "vimdoc", "javascript", "typescript", "rust" },
-        highlight = { enable = true },
-        autopairs = { enable = true },
-        autotag = { enable = true },
-        indent = { enable = true },
-      })
-    end,
-  },
-}, {})
-
--- setup colorscheme
-vim.cmd.colorscheme("habamax")
-
 -- setup telescope keymaps
 meov.keymap(
 	{ "n", "<C-p>",           ":Telescope find_files<CR>",                "Find files" },
@@ -153,3 +168,8 @@ meov.keymap(
 	{ "n", "<leader>gr",      ":Telescope lsp_references<CR>",            "Goto references" },
 	{ "n", "<leader>gs",      ":Telescope lsp_document_symbols<CR>",      "Goto symbols" }
 )
+
+        --{ "n", "K", vim.lsp.buf.hover, "Hover doc" },
+        --{ "n", "<leader>gd", vim.lsp.buf.definition, "Go to definition" },
+        --{ "n", "<leader>gr", vim.lsp.buf.references, "Go to references" },
+        --{ { "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, "Code action" }
