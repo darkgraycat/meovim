@@ -1,8 +1,6 @@
 -- MeoVim --
 print("Meov!")
 
--- bootstrap package manager
-
 -- helper functions
 local meov = {
   keymap = function(...)
@@ -13,8 +11,8 @@ local meov = {
 }
 -- define globals
 vim.g.mapleader = " "
-vim.g.loaded_netrw = 1
-vim.g.loaded_netrwPlugin = 1
+--vim.g.loaded_netrw = 1
+--vim.g.loaded_netrwPlugin = 1
 -- define options
 local settings = {
   termguicolors = true,
@@ -60,7 +58,7 @@ vim.fn.sign_define("DiagnosticSignError", { text = " ", texthl = "DiagnosticS
 vim.fn.sign_define("DiagnosticSignWarn", { text = " ", texthl = "DiagnosticSignWarn" })
 vim.fn.sign_define("DiagnosticSignInfo", { text = " ", texthl = "DiagnosticSignInfo" })
 vim.fn.sign_define("DiagnosticSignHint", { text = "󰌵", texthl = "DiagnosticSignHint" })
--- setup keymaps
+-- setup general keymaps
 meov.keymap(
   -- yank to global
   { "v", "<leader>y", [["+y]] },
@@ -82,6 +80,19 @@ meov.keymap(
   { { "n", "v", "i" }, "<C-Z>", "<Esc>" },
   { { "n", "v", "i" }, "<C-z>", "<Esc>" }
 )
-
+-- bootstrap package manager
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+require("lazy").setup({}, {})
 -- setup colorscheme
 vim.cmd.colorscheme("habamax")
