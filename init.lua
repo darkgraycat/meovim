@@ -9,10 +9,10 @@ local meov = {
     end
   end,
 }
+
 -- define globals
 vim.g.mapleader = " "
---vim.g.loaded_netrw = 1
---vim.g.loaded_netrwPlugin = 1
+
 -- define options
 local settings = {
   termguicolors = true,
@@ -53,11 +53,13 @@ for option, value in pairs(settings) do
   if vim.fn.exists("+" .. option) == 1 then vim.opt[option] = value
   else vim.notify("Option " .. option .. " is not exist", vim.log.levels.WARN) end
 end
+
 -- setup diagnostic signs
 vim.fn.sign_define("DiagnosticSignError", { text = " ", texthl = "DiagnosticSignError" })
 vim.fn.sign_define("DiagnosticSignWarn", { text = " ", texthl = "DiagnosticSignWarn" })
 vim.fn.sign_define("DiagnosticSignInfo", { text = " ", texthl = "DiagnosticSignInfo" })
 vim.fn.sign_define("DiagnosticSignHint", { text = "󰌵", texthl = "DiagnosticSignHint" })
+
 -- setup general keymaps
 meov.keymap(
   -- yank to global
@@ -80,6 +82,7 @@ meov.keymap(
   { { "n", "v", "i" }, "<C-Z>", "<Esc>" },
   { { "n", "v", "i" }, "<C-z>", "<Esc>" }
 )
+
 -- bootstrap package manager
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -93,6 +96,45 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
-require("lazy").setup({}, {})
+
+-- install and config plugins
+require("lazy").setup({
+  { "nvim-lua/plenary.nvim" },
+  { 
+    "nvim-telescope/telescope.nvim",
+    config = function()
+      require("telescope").setup({
+				defaults = {
+					wrap_results = false,
+					path_display = { "smart" },
+					file_ignore_patterns = { "node_modules/.*", "build/.*", "dist/.*" },
+				},
+        pickers = {
+          find_files            = { layout_strategy = "horizontal" },
+          live_grep             = { layout_strategy = "horizontal" },
+          buffers               = { layout_strategy = "vertical" },
+          diagnostics           = { layout_strategy = "vertical", theme = "ivy" },
+          git_status            = { layout_strategy = "vertical" }, 
+    			lsp_references        = { theme = "cursor", jump_type = "never" },
+					lsp_definitions       = { theme = "cursor", jump_type = "never" },
+					lsp_document_symbols  = { theme = "dropdown" },
+        },
+      })
+    end
+  },
+}, {})
+
 -- setup colorscheme
 vim.cmd.colorscheme("habamax")
+
+-- setup telescope keymaps
+meov.keymap(
+	{ "n", "<C-p>",           ":Telescope find_files<CR>",                "Find files" },
+	{ "n", "<leader>fs",      ":Telescope live_grep<CR>",                 "Search files" },
+  { "n", "<leader><space>", ":Telescope buffers<CR>",                   "Opened buffers" },
+	{ "n", "<leader>de",      ":Telescope diagnostics<CR>",               "Show diagnostics" },
+	{ "n", "<leader>gs",      ":Telescope git_status<CR>",                "Git status" },
+	{ "n", "<leader>gd",      ":Telescope lsp_definitions<CR>",           "Goto definition" },
+	{ "n", "<leader>gr",      ":Telescope lsp_references<CR>",            "Goto references" },
+	{ "n", "<leader>gs",      ":Telescope lsp_document_symbols<CR>",      "Goto symbols" }
+)
