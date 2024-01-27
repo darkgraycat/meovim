@@ -76,6 +76,7 @@ meov.keymap(
   { "v", "J", ":m '>+1<CR>gv=gv" },
   { "v", "K", ":m '<-2<CR>gv=gv" },
   -- remap some common stuff
+  { "n", "<leader>E", ":Ex<CR>" },
   { "i", "<C-c>", "<Esc>" },
   { "n", "Q", "<nop>" },
   { { "n", "v", "i" }, "<C-S-Z>", "<Esc>" },
@@ -121,6 +122,20 @@ require("lazy").setup({
         },
       })
     end
+  },
+  {
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate",
+    config = function()
+      require("nvim-treesitter.configs").setup({
+        sync_install = false,
+        ensure_installed = { "lua", "vimdoc", "javascript", "typescript", "rust" },
+        highlight = { enable = true },
+        autopairs = { enable = true },
+        autotag = { enable = true },
+        indent = { enable = true },
+      })
+    end,
   },
 }, {})
 
