@@ -39,6 +39,19 @@ local keymaps = {
   {"n", "<Tab>", ":bnext <CR>"},
   {"n", "<S-Tab>", ":bprevious <CR>"},
   {"n", "<A-Tab>", ":bdelete! <CR>"},
+  -- telescope
+  { "n", "<C-p>", ":Telescope find_files<CR>", "Find files" },
+  { "n", "<leader>fg", ":Telescope live_grep<CR>", "File grep" },
+  { "n", "<leader>fb", ":Telescope buffers<CR>", "Opened buffers" },
+  { "n", "<leader>de", ":Telescope diagnostics<CR>", "Show diagnostics" },
+  { "n", "<leader>fGs", ":Telescope git_status<CR>", "Git status" },
+  { "n", "<leader>fGc", ":Telescope git_stash<CR>", "Git stash" },
+  { "n", "<leader>fGc", ":Telescope git_commits<CR>", "Git commits" },
+  { "n", "<leader>fGd", ":Telescope git_bcommits<CR>", "Git current diff" },
+  { "n", "<leader>fGb", ":Telescope git_branches<CR>", "Git branches" },
+  { "n", "<leader>fd", ":Telescope lsp_definitions<CR>", "LSP definitions" },
+  { "n", "<leader>fr", ":Telescope lsp_references<CR>", "LSP references" },
+  { "n", "<leader>fs", ":Telescope lsp_document_symbols<CR>", "LSP symbols" }
 }
 
 --[[ #globals ]]--
@@ -48,6 +61,7 @@ local globals = {
   netrw_liststyle = 3,
   netrw_browse_split = 4,
   netrw_showhide = 1,
+  netrw_altv = 1,
   netrw_winsize = 25,
 }
 
@@ -116,7 +130,23 @@ local helpers = {
 }
 
 --[[ #plugins ]]--
--- lazy
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+require("lazy").setup({
+  { "nvim-lua/plenary.nvim" },
+  { "nvim-telescope/telescope.nvim" },
+  { "folke/tokyonight.nvim" },
+}, {})
 -- telescope
 -- treesitter
 -- lualine
@@ -126,11 +156,10 @@ local helpers = {
 -- oil
 
 --[[ #configure ]]--
+helpers.apply_settings(globals, options)
+helpers.apply_keymaps(keymaps)
 vim.cmd[[set path+=**]]
 vim.cmd[[autocmd VimResized * :wincmd =]]
 vim.cmd[[autocmd WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "netrw"|q|endif]]
-vim.cmd[[colorscheme slate]]
 vim.cmd[[set wildmenu]]
-
-helpers.apply_settings(globals, options)
-helpers.apply_keymaps(keymaps)
+vim.cmd[[colorscheme tokyonight-night]]
