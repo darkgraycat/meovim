@@ -157,7 +157,7 @@ require("lazy").setup({
   { "goolord/alpha-nvim" },
   { "folke/tokyonight.nvim" },
   { "akinsho/horizon.nvim" },
-  { "sainnhe/sonokai" },
+  { "sainnhe/gruvbox-material" },
 }, {})
 
 --[[ #plugins config ]]--
@@ -184,7 +184,7 @@ do
     open_mapping = [[<c-\>]],
     size = 20,
     direction = "float",
-    float_opts = { border = "none" },
+    float_opts = { border = "solid" },
     highlights = { NormalFloat = { guibg = "" }},
   }
   require"lualine".setup {
@@ -207,9 +207,11 @@ do
       lualine_a = { "tabs" },
     },
   }
-  require"mason".setup{}
-  require"mason-lspconfig".setup{}
-  local lspconfig, cmp, capabilities = require("lspconfig"), require("cmp"), require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
+  require"mason".setup {}
+  require"mason-lspconfig".setup {}
+  local lspconfig = require"lspconfig"
+  local cmp = require"cmp"
+  local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
   local lsps = { "lua_ls", "tsserver", "rust_analyzer" }
   for _, lsp in ipairs(lsps) do lspconfig[lsp].setup({ capabilities = capabilities }) end
   cmp.setup {
@@ -238,4 +240,4 @@ vim.cmd[[set path+=**]]
 vim.cmd[[autocmd VimResized * :wincmd =]]
 vim.cmd[[autocmd WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "netrw"|q|endif]]
 vim.cmd[[set wildmenu]]
-vim.cmd[[colorscheme sonokai]]
+vim.cmd[[colorscheme gruvbox-material]]
