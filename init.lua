@@ -193,7 +193,6 @@ require("lazy").setup({
   { "folke/tokyonight.nvim" },
   { "akinsho/horizon.nvim" },
   { "sainnhe/gruvbox-material" },
-  { "ashervb/synthwave.vim" },
 }, {})
 
 --[[ #plugins config ]]--
@@ -297,4 +296,4 @@ vim.cmd[[set path+=**]]
 vim.cmd[[autocmd VimResized * :wincmd =]]
 vim.cmd[[autocmd WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "netrw"|q|endif]]
 vim.cmd[[set wildmenu]]
-vim.cmd[[colorscheme synthwave]]
+vim.cmd[[colorscheme horizon]]
