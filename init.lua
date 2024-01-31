@@ -28,7 +28,7 @@ local keymaps = {
   { { "n", "v" }, "<C-k>", "5kzz" },
   { "v", "<leader>y", [["+y]] },
   { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
-  { "n", "<C-/>", ":Lex<CR>" },
+  { { "n", "i" }, "<C-/>", ":Lex<CR>" },
   { { "n", "i" }, "<C-\\>", ":ToggleTerm<CR>" },
   { "n", "<C-o>", [[<cmd>lua require('oil').toggle_float()<CR>]]},
   -- move line
