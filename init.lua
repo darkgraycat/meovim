@@ -46,7 +46,7 @@ local keymaps = {
   { "n", "<leader>gr", ":Telescope lsp_references<CR>", "LSP references" },
   { "n", "<leader>fs", ":Telescope lsp_document_symbols<CR>", "LSP symbols" },
   -- lsp
-  { { "n", "v" }, "K", vim.lsp.buf.hover },
+  { { "n" }, "K", vim.lsp.buf.hover },
   { { "n", "v" }, "<C-Space>", vim.lsp.buf.code_action }
 }
 
@@ -110,7 +110,6 @@ local options = {
   splitright = true,
   splitbelow = true,
   fillchars = [[eob: ,fold: ,foldopen:▼,foldsep: ,foldclose:⏵]],
-  --listchars = [[tab:. ,space:.,multispace:. ,precedes:1]],
   listchars = [[multispace:. ]],
   list = true,
 }
@@ -178,18 +177,21 @@ do
       lsp_document_symbols = { theme = "dropdown" },
     },
   }
+
   require"toggleterm".setup {
     open_mapping = [[<c-\>]],
     size = 20,
-    winblend = 3,
     direction = "float",
     float_opts = { border = "none" },
+    highlights = { NormalFloat = { guibg = "" }},
   }
   require"lualine".setup {
-    --options = {
-    --  component_separators = { left = '╲', right = '╱'},
-    --  section_separators = { left = '', right = ''},
-    --},
+    options = {
+      --component_separators = { left = '╲', right = '╱'},
+      --section_separators = { left = '', right = ''},
+      component_separators = { left = '╲╲', right = '╱╱'},
+      section_separators = { left = " ", right = " "},
+    },
     sections = {
       lualine_a = { "mode", "branch" },
       lualine_b = { "diff", "diagnostics" },
@@ -199,8 +201,8 @@ do
       lualine_z = { "location" },
     },
     tabline = {
-      lualine_a = { "tabs" },
       lualine_b = { "buffers" },
+      lualine_a = { "tabs" },
     },
   }
   require("mason").setup()
