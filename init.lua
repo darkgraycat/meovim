@@ -1,4 +1,21 @@
 --[[ ^w^ MeoVim ^w^ ]]--
+local meovim = {
+  [[                       ░░░ ░░░                    ]],
+  [[                      ░▒█░░▒█░                    ]],
+  [[                     ░▒▓█░░░░░░                   ]],
+  [[                     ░▒░░▓▓██▓▓░                  ]],
+  [[                     ░▒▒▓▓▓▓██▓▓░                 ]],
+  [[                    ░░▒▓▓▓░▓▓▓░▓░                 ]],
+  [[                   ░▓░▒▒▓▓░▓▓▓░▓░                 ]],
+  [[                  ░▒░░▒▓▓▓▓██░█▓░                 ]],
+  [[                  ░▓░░▒▒▓▓▓████▓░                 ]],
+  [[                   ░▒░░▒▒▒▒▒▒▒▒░                  ]],
+  [[                   ░▓░░░░░░░░░░                   ]],
+  [[                    ░▓▓▓▓▓███░                    ]],
+  [[                    ░▓▓▓▓▓███░                    ]],
+  [[                    ░▒▓▓▒▒▓█▓░                    ]],
+  [[                    ░▒▒░░▒▒░▒░                    ]],
+}
 
 --[[ #keymaps ]]--
 local keymaps = {
@@ -226,7 +243,11 @@ do
       ['<CR>'] = cmp.mapping.confirm({ select = false }),
     },
   }
-  require"alpha".setup(require"alpha.themes.theta".config)
+  -- TODO: add cat
+
+  local alpha_th = require"alpha.themes.theta"
+  alpha_th.header.val = meovim
+  require"alpha".setup(alpha_th.config)
 end
 
 --[[ #apply ]]--
