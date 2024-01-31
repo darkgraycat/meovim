@@ -28,7 +28,9 @@ local keymaps = {
   { { "n", "v" }, "<C-k>", "5kzz" },
   { "v", "<leader>y", [["+y]] },
   { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
-  { { "n", "v" }, "<C-/>", ":Lex<CR>" },
+  { "n", "<C-/>", ":Lex<CR>" },
+  { "n", "<C-o>", ":Oil --float --toggle<CR>" },
+  { "n", "<C-o>", [[<cmd>lua require('oil').toggle_float()<CR>]]},
   -- move line
   { "v", "J", ":m '>+1<CR>gv=gv" },
   { "v", "K", ":m '<-2<CR>gv=gv" },
@@ -134,8 +136,8 @@ local options = {
 --[[ #icons ]]--
 local icons = {
   autocomplete = {
-    Text = "", Method = "󰆧", Function = "󰊕", Constructor = "", Field = "󰇽",
-    Variable = "󰂡", Class = "󰠱", Interface = "", Module = "", Property = "󰜢",
+    Text = "󰦨", Method = "󰆧", Function = "󰊕", Constructor = "", Field = "󰇽",
+    Variable = "󰫧", Class = "󰠱", Interface = "", Module = "", Property = "󰜢",
     Unit = "", Value = "󰎠", Enum = "", Keyword = "󰌋", Snippet = "",
     Color = "󰏘", File = "󰈙", Reference = "", Folder = "󰉋", EnumMember = "",
     Constant = "󰏿", Struct = "", Event = "", Operator = "󰆕", TypeParameter = "󰅲",
@@ -177,6 +179,7 @@ require("lazy").setup({
   -- ui
   { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
   { "nvim-lualine/lualine.nvim", dependencies = { "nvim-tree/nvim-web-devicons" } },
+  { "stevearc/oil.nvim", dependencies = { "nvim-tree/nvim-web-devicons" } },
   { "akinsho/toggleterm.nvim" },
   -- content
   { "nvim-treesitter/nvim-treesitter" },
@@ -190,6 +193,7 @@ require("lazy").setup({
   { "folke/tokyonight.nvim" },
   { "akinsho/horizon.nvim" },
   { "sainnhe/gruvbox-material" },
+  { "ashervb/synthwave.vim" },
 }, {})
 
 --[[ #plugins config ]]--
@@ -210,6 +214,20 @@ do
       lsp_references = { theme = "cursor", jump_type = "never", path_display = { "short" } },
       lsp_definitions = { theme = "cursor", jump_type = "never", path_display = { "short" } },
       lsp_document_symbols = { theme = "dropdown" },
+    },
+  }
+  require"oil".setup {
+    default_file_explorer = false,
+    win_options = {
+      signcolumn = "no",
+      conceallevel = 3,
+      concealcursor = "nvic",
+    },
+    float = {
+      border = "solid",
+      padding = 2,
+      max_width = 120,
+      max_height = 40,
     },
   }
   require"toggleterm".setup {
@@ -280,4 +298,4 @@ vim.cmd[[set path+=**]]
 vim.cmd[[autocmd VimResized * :wincmd =]]
 vim.cmd[[autocmd WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "netrw"|q|endif]]
 vim.cmd[[set wildmenu]]
-vim.cmd[[colorscheme gruvbox-material]]
+vim.cmd[[colorscheme synthwave]]
