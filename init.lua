@@ -204,6 +204,7 @@ do
     direction = "float",
     float_opts = { border = "solid" },
     highlights = { NormalFloat = { guibg = "" }},
+    persist_mode = true,
   }
   require"lualine".setup {
     options = {
