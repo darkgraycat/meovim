@@ -127,7 +127,7 @@ local options = {
   splitright = true,
   splitbelow = true,
   fillchars = [[eob: ,fold: ,foldopen:▼,foldsep: ,foldclose:⏵]],
-  listchars = [[multispace:. ]],
+  listchars = [[multispace:. ,]],
   list = true,
 }
 
@@ -209,7 +209,7 @@ do
     options = {
       --component_separators = { left = '╲', right = '╱'},
       --section_separators = { left = '', right = ''},
-      component_separators = { left = '╲╲', right = '╱╱'},
+      component_separators = { left = '╲╲', right = '|'},
       section_separators = { left = " ", right = " "},
     },
     sections = {
@@ -230,7 +230,7 @@ do
   local lspconfig = require"lspconfig"
   local cmp = require"cmp"
   local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
-  local lsps = { "lua_ls", "tsserver", "rust_analyzer" }
+  local lsps = { "lua_ls", "tsserver", "rust_analyzer", "intelephense" }
   for _, lsp in ipairs(lsps) do lspconfig[lsp].setup({ capabilities = capabilities }) end
   cmp.setup {
     sources = { {name = 'nvim_lsp' }, {name = 'buffer' } },
@@ -262,4 +262,4 @@ vim.cmd[[set path+=**]]
 vim.cmd[[autocmd VimResized * :wincmd =]]
 vim.cmd[[autocmd WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "netrw"|q|endif]]
 vim.cmd[[set wildmenu]]
-vim.cmd[[colorscheme gruvbox-material]]
+vim.cmd[[colorscheme tokyonight-night]]
