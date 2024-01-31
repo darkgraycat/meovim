@@ -142,16 +142,19 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
+  -- ui
   { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
   { "nvim-lualine/lualine.nvim", dependencies = { "nvim-tree/nvim-web-devicons" } },
   { "akinsho/toggleterm.nvim" },
+  -- content
   { "nvim-treesitter/nvim-treesitter" },
   { "williamboman/mason.nvim" },
   { "williamboman/mason-lspconfig.nvim" },
   { "neovim/nvim-lspconfig" },
   { "hrsh7th/cmp-nvim-lsp" },
   { "hrsh7th/nvim-cmp" },
-  -- themes
+  -- misc & themes
+  { "goolord/alpha-nvim" },
   { "folke/tokyonight.nvim" },
   { "akinsho/horizon.nvim" },
   { "sainnhe/sonokai" },
@@ -177,7 +180,6 @@ do
       lsp_document_symbols = { theme = "dropdown" },
     },
   }
-
   require"toggleterm".setup {
     open_mapping = [[<c-\>]],
     size = 20,
@@ -205,8 +207,8 @@ do
       lualine_a = { "tabs" },
     },
   }
-  require("mason").setup()
-  require("mason-lspconfig").setup()
+  require"mason".setup{}
+  require"mason-lspconfig".setup{}
   local lspconfig, cmp, capabilities = require("lspconfig"), require("cmp"), require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
   local lsps = { "lua_ls", "tsserver", "rust_analyzer" }
   for _, lsp in ipairs(lsps) do lspconfig[lsp].setup({ capabilities = capabilities }) end
@@ -222,6 +224,7 @@ do
       ['<CR>'] = cmp.mapping.confirm({ select = false }),
     },
   }
+  require"alpha".setup(require"alpha.themes.theta".config)
 end
 
 --[[ #apply ]]--
