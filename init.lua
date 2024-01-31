@@ -29,7 +29,6 @@ local keymaps = {
   { "v", "<leader>y", [["+y]] },
   { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
   { { "n", "v" }, "<C-/>", ":Lex<CR>" },
-  { { "n", "i" }, "<C-\\>", ":ToggleTerm<CR>" },
   { "n", "<C-o>", [[<cmd>lua require('oil').toggle_float()<CR>]]},
   -- move line
   { "v", "J", ":m '>+1<CR>gv=gv" },
@@ -57,10 +56,10 @@ local keymaps = {
   {"n", "<A-Tab>", ":bdelete! <CR>"},
   -- telescope
   { "n", "<C-p>", ":Telescope find_files<CR>", "Find files" },
+  { "n", "<C-g>", ":Telescope git_", "Git commands" },
   { "n", "<leader>fg", ":Telescope live_grep<CR>", "File grep" },
   { "n", "<leader>fb", ":Telescope buffers<CR>", "Opened buffers" },
   { "n", "<leader>de", ":Telescope diagnostics<CR>", "Show diagnostics" },
-  { "n", "<leader>G", ":Telescope git_", "Git commands" },
   { "n", "<leader>gd", ":Telescope lsp_definitions<CR>", "LSP definitions" },
   { "n", "<leader>gr", ":Telescope lsp_references<CR>", "LSP references" },
   { "n", "<leader>fs", ":Telescope lsp_document_symbols<CR>", "LSP symbols" },
@@ -230,6 +229,7 @@ do
     },
   }
   require"toggleterm".setup {
+    open_mapping = [[<c-\>]],
     size = 20,
     direction = "float",
     float_opts = { border = "solid" },
