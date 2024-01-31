@@ -141,10 +141,10 @@ local icons = {
     Constant = "󰏿", Struct = "", Event = "", Operator = "󰆕", TypeParameter = "󰅲",
   },
   diagnostics = {
-    DiagnosticSignError = " ",
-    DiagnosticSignWarn = " ",
-    DiagnosticSignInfo = " ",
-    DiagnosticSignHint = "󰌵",
+    DiagnosticSignError = "",
+    DiagnosticSignWarn = "",
+    DiagnosticSignInfo = "",
+    DiagnosticSignHint = "󰌵 ",
   }
 }
 
@@ -275,7 +275,7 @@ end
 --[[ #apply ]]--
 helpers.apply_settings(globals, options)
 helpers.apply_keymaps(keymaps)
-for texthl, text in ipairs(icons.diagnostics) do vim.fn.sign_define(texthl, { text, texthl }) end
+for hl, icon in pairs(icons.diagnostics) do vim.fn.sign_define(hl, { text = icon, texthl = hl }) end
 vim.cmd[[set path+=**]]
 vim.cmd[[autocmd VimResized * :wincmd =]]
 vim.cmd[[autocmd WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "netrw"|q|endif]]
