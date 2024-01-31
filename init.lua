@@ -127,8 +127,25 @@ local options = {
   splitright = true,
   splitbelow = true,
   fillchars = [[eob: ,fold: ,foldopen:▼,foldsep: ,foldclose:⏵]],
-  listchars = [[multispace:. ,]],
+  listchars = [[multispace:. ,tab:⬄  ,]],
   list = true,
+}
+
+--[[ #icons ]]--
+local icons = {
+  autocomplete = {
+    Text = "", Method = "󰆧", Function = "󰊕", Constructor = "", Field = "󰇽",
+    Variable = "󰂡", Class = "󰠱", Interface = "", Module = "", Property = "󰜢",
+    Unit = "", Value = "󰎠", Enum = "", Keyword = "󰌋", Snippet = "",
+    Color = "󰏘", File = "󰈙", Reference = "", Folder = "󰉋", EnumMember = "",
+    Constant = "󰏿", Struct = "", Event = "", Operator = "󰆕", TypeParameter = "󰅲",
+  },
+  diagnostics = {
+    DiagnosticSignError = " ",
+    DiagnosticSignWarn = " ",
+    DiagnosticSignInfo = " ",
+    DiagnosticSignHint = "󰌵",
+  }
 }
 
 --[[ #helpers ]]--
@@ -140,9 +157,6 @@ local helpers = {
   apply_keymaps = function (keymaps)
     for _, m in pairs(keymaps) do vim.keymap.set(m[1], m[2], m[3], { noremap = true, silent = false, desc = m[4] } ) end
   end,
-  apply_signs = function (signs)
-    for _, s in pairs(signs) do vim.fn.sign_define(s[1], { text = s[2], texthl = s[1] }) end
-  end
 }
 
 --[[ #plugins install ]]--
@@ -233,13 +247,12 @@ do
   local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
   local lsps = { "lua_ls", "tsserver", "rust_analyzer", "intelephense" }
   for _, lsp in ipairs(lsps) do lspconfig[lsp].setup({ capabilities = capabilities }) end
-  local kind_icons = { Text = "", Method = "󰆧", Function = "󰊕", Constructor = "", Field = "󰇽", Variable = "󰂡", Class = "󰠱", Interface = "", Module = "", Property = "󰜢", Unit = "", Value = "󰎠", Enum = "", Keyword = "󰌋", Snippet = "", Color = "󰏘", File = "󰈙", Reference = "", Folder = "󰉋", EnumMember = "", Constant = "󰏿", Struct = "", Event = "", Operator = "󰆕", TypeParameter = "󰅲" }
   cmp.setup {
     sources = { {name = 'nvim_lsp' }, {name = 'buffer' } },
     formatting = {
       format = function(_, vim_item)
         local kind = vim_item.kind
-        vim_item.kind = (kind_icons[kind] or "?")
+        vim_item.kind = (icons.autocomplete[kind] or "?")
         vim_item.menu = "" .. kind
         return vim_item
       end,
@@ -262,12 +275,7 @@ end
 --[[ #apply ]]--
 helpers.apply_settings(globals, options)
 helpers.apply_keymaps(keymaps)
-helpers.apply_signs({
-  { "DiagnosticSignError"," " },
-  { "DiagnosticSignWarn", " " },
-  { "DiagnosticSignInfo", " " },
-  { "DiagnosticSignHint", "󰌵" },
-})
+for texthl, text in ipairs(icons.diagnostics) do vim.fn.sign_define(texthl, { text, texthl }) end
 vim.cmd[[set path+=**]]
 vim.cmd[[autocmd VimResized * :wincmd =]]
 vim.cmd[[autocmd WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "netrw"|q|endif]]
