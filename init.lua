@@ -177,8 +177,8 @@ do
       buffers = { layout_strategy = "vertical" },
       diagnostics = { layout_strategy = "vertical", theme = "ivy" },
       git_status = { layout_strategy = "vertical" },
-      lsp_references = { theme = "cursor", jump_type = "never" },
-      lsp_definitions = { theme = "cursor", jump_type = "never" },
+      lsp_references = { theme = "cursor", jump_type = "never", path_display = { "short" } },
+      lsp_definitions = { theme = "cursor", jump_type = "never", path_display = { "short" } },
       lsp_document_symbols = { theme = "dropdown" },
     },
   }
@@ -209,7 +209,7 @@ do
   }
   require("mason").setup()
   require("mason-lspconfig").setup()
-  local lspconfig, cmp, capabilities = require("lspconfig"), require("cmp"), require('cmp_nvim_lsp').default_capabilities()
+  local lspconfig, cmp, capabilities = require("lspconfig"), require("cmp"), require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
   local lsps = { "lua_ls", "tsserver", "rust_analyzer" }
   for _, lsp in ipairs(lsps) do lspconfig[lsp].setup({ capabilities = capabilities }) end
   cmp.setup {
