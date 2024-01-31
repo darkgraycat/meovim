@@ -41,11 +41,7 @@ local keymaps = {
   { "n", "<leader>fg", ":Telescope live_grep<CR>", "File grep" },
   { "n", "<leader>fb", ":Telescope buffers<CR>", "Opened buffers" },
   { "n", "<leader>de", ":Telescope diagnostics<CR>", "Show diagnostics" },
-  { "n", "<leader>fGs", ":Telescope git_status<CR>", "Git status" },
-  { "n", "<leader>fGc", ":Telescope git_stash<CR>", "Git stash" },
-  { "n", "<leader>fGc", ":Telescope git_commits<CR>", "Git commits" },
-  { "n", "<leader>fGd", ":Telescope git_bcommits<CR>", "Git current diff" },
-  { "n", "<leader>fGb", ":Telescope git_branches<CR>", "Git branches" },
+  { "n", "<leader>G", ":Telescope git_", "Git commands" },
   { "n", "<leader>gd", ":Telescope lsp_definitions<CR>", "LSP definitions" },
   { "n", "<leader>gr", ":Telescope lsp_references<CR>", "LSP references" },
   { "n", "<leader>fs", ":Telescope lsp_document_symbols<CR>", "LSP symbols" },
@@ -127,7 +123,7 @@ local helpers = {
   end,
   apply_keymaps = function (keymaps)
     for _, m in pairs(keymaps) do
-      vim.keymap.set(m[1], m[2], m[3], { noremap = true, silent = true, desc = m[4] } )
+      vim.keymap.set(m[1], m[2], m[3], { noremap = true, silent = false, desc = m[4] } )
     end
   end
 }
