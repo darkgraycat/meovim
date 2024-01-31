@@ -243,8 +243,6 @@ do
       ['<CR>'] = cmp.mapping.confirm({ select = false }),
     },
   }
-  -- TODO: add cat
-
   local alpha_th = require"alpha.themes.theta"
   alpha_th.header.val = meovim
   require"alpha".setup(alpha_th.config)
