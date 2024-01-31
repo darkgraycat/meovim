@@ -138,9 +138,10 @@ local helpers = {
     for option, value in pairs(options) do vim.opt[option] = value end
   end,
   apply_keymaps = function (keymaps)
-    for _, m in pairs(keymaps) do
-      vim.keymap.set(m[1], m[2], m[3], { noremap = true, silent = false, desc = m[4] } )
-    end
+    for _, m in pairs(keymaps) do vim.keymap.set(m[1], m[2], m[3], { noremap = true, silent = false, desc = m[4] } ) end
+  end,
+  apply_signs = function (signs)
+    for _, s in pairs(signs) do vim.fn.sign_define(s[1], { text = s[2], texthl = s[1] }) end
   end
 }
 
@@ -251,10 +252,12 @@ end
 --[[ #apply ]]--
 helpers.apply_settings(globals, options)
 helpers.apply_keymaps(keymaps)
-vim.fn.sign_define("DiagnosticSignError", { text = " ", texthl = "DiagnosticSignError" })
-vim.fn.sign_define("DiagnosticSignWarn", { text = " ", texthl = "DiagnosticSignWarn" })
-vim.fn.sign_define("DiagnosticSignInfo", { text = " ", texthl = "DiagnosticSignInfo" })
-vim.fn.sign_define("DiagnosticSignHint", { text = "󰌵", texthl = "DiagnosticSignHint" })
+helpers.apply_signs({
+  { "DiagnosticSignError"," " },
+  { "DiagnosticSignWarn", " " },
+  { "DiagnosticSignInfo", " " },
+  { "DiagnosticSignHint", "󰌵" },
+})
 vim.cmd[[set path+=**]]
 vim.cmd[[autocmd VimResized * :wincmd =]]
 vim.cmd[[autocmd WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "netrw"|q|endif]]
