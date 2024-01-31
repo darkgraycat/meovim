@@ -29,7 +29,7 @@ local keymaps = {
   { "v", "<leader>y", [["+y]] },
   { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
   { "n", "<C-/>", ":Lex<CR>" },
-  { "n", "<C-o>", ":Oil --float --toggle<CR>" },
+  { { "n", "i" }, "<C-\\>", ":ToggleTerm<CR>" },
   { "n", "<C-o>", [[<cmd>lua require('oil').toggle_float()<CR>]]},
   -- move line
   { "v", "J", ":m '>+1<CR>gv=gv" },
@@ -231,7 +231,6 @@ do
     },
   }
   require"toggleterm".setup {
-    open_mapping = [[<c-\>]],
     size = 20,
     direction = "float",
     float_opts = { border = "solid" },
