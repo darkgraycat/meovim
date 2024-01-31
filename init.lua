@@ -222,10 +222,10 @@ do
   }
   require"lualine".setup {
     options = {
-      --component_separators = { left = '╲', right = '╱'},
-      --section_separators = { left = '', right = ''},
-      component_separators = { left = '╲╲', right = '|'},
-      section_separators = { left = " ", right = " "},
+      component_separators = { left = '╲', right = '╱'},
+      section_separators = { left = '', right = ''},
+      --component_separators = { left = '╲', right = '|'},
+      --section_separators = { left = " ", right = " "},
     },
     sections = {
       lualine_a = { "mode", "branch" },
@@ -236,8 +236,8 @@ do
       lualine_z = { "location" },
     },
     tabline = {
-      lualine_b = { "buffers" },
-      lualine_a = { "tabs" },
+      lualine_x = { { "tabs", mode = 2 } },
+      lualine_a = { { "buffers", max_length = vim.o.columns * 4 / 5, use_mode_colors = true } },
     },
   }
   require"mason".setup {}
