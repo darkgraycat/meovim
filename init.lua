@@ -5,25 +5,22 @@ local keymaps = {
   -- control
   { { "i", "c" }, "jk", "<Esc>" },
   { "i", "<C-c>", "<Esc>" },
-  { "i", "<C-Space>", "<C-N>" },
   { { "n", "v" }, "<C-d>", "<C-d>zz" },
   { { "n", "v" }, "<C-u>", "<C-u>zz" },
   { { "n", "v" }, "<C-j>", "5jzz" },
   { { "n", "v" }, "<C-k>", "5kzz" },
   { "v", "<leader>y", [["+y]] },
   { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
-  -- menus
-  { { "n", "v" }, "<C-\\>", ":Lex<CR>" },
-  { { "n", "v" }, "<C-/>", ":Lex!<CR>" },
+  { { "n", "v" }, "<C-/>", ":Lex<CR>" },
   -- move line
   { "v", "J", ":m '>+1<CR>gv=gv" },
   { "v", "K", ":m '<-2<CR>gv=gv" },
   -- parenthesis
-  { "i", "[[", "[]<left>" }, { "v", "[[", "<Esc>`>a]<Esc>`<i[" },
-  { "i", "((", "()<left>" }, { "v", "((", "<Esc>`>a)<Esc>`<i(" },
-  { "i", "{{", "{}<left>" }, { "v", "{{", "<Esc>`>a}<Esc>`<i{" },
-  { "i", "''", "''<left>" }, { "v", "''", "<Esc>`>a'<Esc>`<i'" },
-  { "i", '""', '""<left>' }, { "v", '""', '<Esc>`>a"<Esc>`<i"' },
+  { "i", "[", "[]<left>" }, { "v", "[[", "<Esc>`>a]<Esc>`<i[" },
+  { "i", "(", "()<left>" }, { "v", "((", "<Esc>`>a)<Esc>`<i(" },
+  { "i", "{", "{}<left>" }, { "v", "{{", "<Esc>`>a}<Esc>`<i{" },
+  { "i", "'", "''<left>" }, { "v", "''", "<Esc>`>a'<Esc>`<i'" },
+  { "i", '"', '""<left>' }, { "v", '""', '<Esc>`>a"<Esc>`<i"' },
   { "i", "/*", "/**/<left><left>" }, { "v", "/*", "<Esc>`>a*/<Esc>`<i/*" },
   -- split window control
   { "n", "<A-Right>", ":vertical resize +3<CR>"},
@@ -49,9 +46,12 @@ local keymaps = {
   { "n", "<leader>fGc", ":Telescope git_commits<CR>", "Git commits" },
   { "n", "<leader>fGd", ":Telescope git_bcommits<CR>", "Git current diff" },
   { "n", "<leader>fGb", ":Telescope git_branches<CR>", "Git branches" },
-  { "n", "<leader>fd", ":Telescope lsp_definitions<CR>", "LSP definitions" },
-  { "n", "<leader>fr", ":Telescope lsp_references<CR>", "LSP references" },
-  { "n", "<leader>fs", ":Telescope lsp_document_symbols<CR>", "LSP symbols" }
+  { "n", "<leader>gd", ":Telescope lsp_definitions<CR>", "LSP definitions" },
+  { "n", "<leader>gr", ":Telescope lsp_references<CR>", "LSP references" },
+  { "n", "<leader>fs", ":Telescope lsp_document_symbols<CR>", "LSP symbols" },
+  -- lsp
+  { { "n", "v" }, "K", vim.lsp.buf.hover },
+  { { "n", "v" }, "<C-Space>", vim.lsp.buf.code_action }
 }
 
 --[[ #globals ]]--
@@ -87,9 +87,9 @@ local options = {
   termguicolors = true,
   number = true,
   relativenumber = true,
-  showmode = true,
-  showcmd = true,
-  cmdheight = 2,
+  showmode = false,
+  showcmd = false,
+  cmdheight = 1,
   showtabline = 2,
   laststatus = 2,
   signcolumn = "yes",
@@ -114,6 +114,9 @@ local options = {
   splitright = true,
   splitbelow = true,
   fillchars = [[eob: ,fold: ,foldopen:▼,foldsep: ,foldclose:⏵]],
+  --listchars = [[tab:. ,space:.,multispace:. ,precedes:1]],
+  listchars = [[multispace:. ]],
+  list = true,
 }
 
 --[[ #helpers ]]--
@@ -129,7 +132,7 @@ local helpers = {
   end
 }
 
---[[ #plugins ]]--
+--[[ #plugins install ]]--
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -142,24 +145,96 @@ if not vim.loop.fs_stat(lazypath) then
   })
 end
 vim.opt.rtp:prepend(lazypath)
-require("lazy").setup({
-  { "nvim-lua/plenary.nvim" },
-  { "nvim-telescope/telescope.nvim" },
-  { "folke/tokyonight.nvim" },
-}, {})
--- telescope
--- treesitter
--- lualine
--- lsp 
--- cmp
--- terminal
--- oil
 
---[[ #configure ]]--
+require("lazy").setup({
+  { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
+  { "nvim-lualine/lualine.nvim", dependencies = { "nvim-tree/nvim-web-devicons" } },
+  { "akinsho/toggleterm.nvim" },
+  { "nvim-treesitter/nvim-treesitter" },
+  { "williamboman/mason.nvim" },
+  { "williamboman/mason-lspconfig.nvim" },
+  { "neovim/nvim-lspconfig" },
+  { "hrsh7th/cmp-nvim-lsp" },
+  { "hrsh7th/nvim-cmp" },
+  -- themes
+  { "folke/tokyonight.nvim" },
+  { "akinsho/horizon.nvim" },
+  { "sainnhe/sonokai" },
+}, {})
+
+--[[ #plugins config ]]--
+do
+  require"telescope".setup {
+    defaults = {
+      wrap_results = false,
+      path_display = { "smart" },
+      borderchars = { " ", " ", " ", " ", " ", " ", " ", " " },
+      file_ignore_patterns = { "node_modules/.*", "build/.*", "dist/.*" },
+    },
+    pickers = {
+      find_files = { layout_strategy = "horizontal" },
+      live_grep = { layout_strategy = "horizontal" },
+      buffers = { layout_strategy = "vertical" },
+      diagnostics = { layout_strategy = "vertical", theme = "ivy" },
+      git_status = { layout_strategy = "vertical" },
+      lsp_references = { theme = "cursor", jump_type = "never" },
+      lsp_definitions = { theme = "cursor", jump_type = "never" },
+      lsp_document_symbols = { theme = "dropdown" },
+    },
+  }
+  require"toggleterm".setup {
+    open_mapping = [[<c-\>]],
+    size = 20,
+    winblend = 3,
+    direction = "float",
+    float_opts = { border = "none" },
+  }
+  require"lualine".setup {
+    --options = {
+    --  component_separators = { left = '╲', right = '╱'},
+    --  section_separators = { left = '', right = ''},
+    --},
+    sections = {
+      lualine_a = { "mode", "branch" },
+      lualine_b = { "diff", "diagnostics" },
+      lualine_c = { { "filename", path = 4 } },
+      lualine_x = { "encoding", "fileformat", "filetype" },
+      lualine_y = { "selectioncount", "progress" },
+      lualine_z = { "location" },
+    },
+    tabline = {
+      lualine_a = { "tabs" },
+      lualine_b = { "buffers" },
+    },
+  }
+  require("mason").setup()
+  require("mason-lspconfig").setup()
+  local lspconfig, cmp, capabilities = require("lspconfig"), require("cmp"), require('cmp_nvim_lsp').default_capabilities()
+  local lsps = { "lua_ls", "tsserver", "rust_analyzer" }
+  for _, lsp in ipairs(lsps) do lspconfig[lsp].setup({ capabilities = capabilities }) end
+  cmp.setup {
+    sources = { {name = 'nvim_lsp' }, {name = 'buffer' } },
+    mapping = cmp.mapping.preset.insert {
+      ["<C-n>"] = cmp.mapping.select_next_item(),
+      ["<C-p>"] = cmp.mapping.select_prev_item(),
+      ["<C-b>"] = cmp.mapping.scroll_docs(-4),
+      ["<C-f>"] = cmp.mapping.scroll_docs(4),
+      ["<C-Space>"] = cmp.mapping.complete(),
+      ["<C-e>"] = cmp.mapping.abort(),
+      ['<CR>'] = cmp.mapping.confirm({ select = false }),
+    },
+  }
+end
+
+--[[ #apply ]]--
 helpers.apply_settings(globals, options)
 helpers.apply_keymaps(keymaps)
+vim.fn.sign_define("DiagnosticSignError", { text = " ", texthl = "DiagnosticSignError" })
+vim.fn.sign_define("DiagnosticSignWarn", { text = " ", texthl = "DiagnosticSignWarn" })
+vim.fn.sign_define("DiagnosticSignInfo", { text = " ", texthl = "DiagnosticSignInfo" })
+vim.fn.sign_define("DiagnosticSignHint", { text = "󰌵", texthl = "DiagnosticSignHint" })
 vim.cmd[[set path+=**]]
 vim.cmd[[autocmd VimResized * :wincmd =]]
 vim.cmd[[autocmd WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "netrw"|q|endif]]
 vim.cmd[[set wildmenu]]
-vim.cmd[[colorscheme tokyonight-night]]
+vim.cmd[[colorscheme sonokai]]
