@@ -232,8 +232,17 @@ do
   local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
   local lsps = { "lua_ls", "tsserver", "rust_analyzer", "intelephense" }
   for _, lsp in ipairs(lsps) do lspconfig[lsp].setup({ capabilities = capabilities }) end
+  local kind_icons = { Text = "", Method = "󰆧", Function = "󰊕", Constructor = "", Field = "󰇽", Variable = "󰂡", Class = "󰠱", Interface = "", Module = "", Property = "󰜢", Unit = "", Value = "󰎠", Enum = "", Keyword = "󰌋", Snippet = "", Color = "󰏘", File = "󰈙", Reference = "", Folder = "󰉋", EnumMember = "", Constant = "󰏿", Struct = "", Event = "", Operator = "󰆕", TypeParameter = "󰅲" }
   cmp.setup {
     sources = { {name = 'nvim_lsp' }, {name = 'buffer' } },
+    formatting = {
+      format = function(_, vim_item)
+        local kind = vim_item.kind
+        vim_item.kind = (kind_icons[kind] or "?")
+        vim_item.menu = "" .. kind
+        return vim_item
+      end,
+    },
     mapping = cmp.mapping.preset.insert {
       ["<C-n>"] = cmp.mapping.select_next_item(),
       ["<C-p>"] = cmp.mapping.select_prev_item(),
@@ -262,4 +271,4 @@ vim.cmd[[set path+=**]]
 vim.cmd[[autocmd VimResized * :wincmd =]]
 vim.cmd[[autocmd WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "netrw"|q|endif]]
 vim.cmd[[set wildmenu]]
-vim.cmd[[colorscheme tokyonight-night]]
+vim.cmd[[colorscheme gruvbox-material]]
