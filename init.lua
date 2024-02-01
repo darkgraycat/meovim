@@ -41,8 +41,8 @@ local keymaps = {
   { "i", '"', '""<left>' }, { "v", '""', '<Esc>`>a"<Esc>`<i"' },
   { "i", "/*", "/**/<left><left>" }, { "v", "/*", "<Esc>`>a*/<Esc>`<i/*" },
   -- split window control
-  { "n", "<A-Right>", ":vertical resize +3<CR>"},
-  { "n", "<A-Left>", ":vertical resize -3<CR>"},
+  { "n", "<A-Left>", ":vertical resize +3<CR>"},
+  { "n", "<A-Right>", ":vertical resize -3<CR>"},
   { "n", "<A-Down>", ":horizontal resize +3<CR>"},
   { "n", "<A-Up>", ":horizontal resize -3<CR>"},
   -- tabs control
@@ -127,7 +127,7 @@ local options = {
   completeopt = "menu,menuone,noselect",
   splitright = true,
   splitbelow = true,
-  fillchars = [[eob: ,fold: ,foldopen:▼,foldsep: ,foldclose:⏵]],
+  fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]],
   listchars = [[multispace:. ,tab:⬄  ,]],
   list = true,
 }
@@ -187,6 +187,7 @@ require("lazy").setup({
   { "neovim/nvim-lspconfig" },
   { "hrsh7th/cmp-nvim-lsp" },
   { "hrsh7th/nvim-cmp" },
+  { "L3MON4D3/LuaSnip" },
   -- misc & themes
   { "goolord/alpha-nvim" },
   { "folke/tokyonight.nvim" },
@@ -252,28 +253,24 @@ do
       lualine_z = { "location" },
     },
     tabline = {
-      lualine_x = { { "tabs", mode = 2 } },
-      lualine_a = { { "buffers", max_length = vim.o.columns * 4 / 5, use_mode_colors = true } },
+      lualine_c = { { "buffers", max_length = vim.o.columns } },
+      lualine_z = { { "tabs", use_mode_colors = true } },
     },
+    extensions = { "oil" },
   }
   require"mason".setup {}
   require"mason-lspconfig".setup {}
   local lspconfig = require"lspconfig"
   local cmp = require"cmp"
   local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+  capabilities.textDocument.completion.completionItem.snippetSupport = false
   local lsps = { "lua_ls", "tsserver", "rust_analyzer", "intelephense" }
   for _, lsp in ipairs(lsps) do lspconfig[lsp].setup({ capabilities = capabilities }) end
   cmp.setup {
-    sources = { {name = 'nvim_lsp' }, {name = 'buffer' } },
-    formatting = {
-      format = function(_, vim_item)
-        local kind = vim_item.kind
-        vim_item.kind = (icons.autocomplete[kind] or "?")
-        vim_item.menu = "" .. kind
-        return vim_item
-      end,
-    },
-    mapping = cmp.mapping.preset.insert {
+    sources = { { name = "nvim_lsp" }, { name = "buffer" }, { name = "luasnip" } },
+    snippet = { expand = function(args) require"luasnip".lsp_expand(args.body) end },
+    formatting = { format = function(_, i) local kind = i.kind i.kind = (icons.autocomplete[kind] or "?") i.menu = "" .. kind return i end },
+    mapping = {
       ["<C-n>"] = cmp.mapping.select_next_item(),
       ["<C-p>"] = cmp.mapping.select_prev_item(),
       ["<C-b>"] = cmp.mapping.scroll_docs(-4),
@@ -296,4 +293,4 @@ vim.cmd[[set path+=**]]
 vim.cmd[[autocmd VimResized * :wincmd =]]
 vim.cmd[[autocmd WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "netrw"|q|endif]]
 vim.cmd[[set wildmenu]]
-vim.cmd[[colorscheme horizon]]
+vim.cmd[[colorscheme gruvbox-material]]
