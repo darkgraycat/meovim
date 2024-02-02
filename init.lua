@@ -30,7 +30,8 @@ local keymaps = {
   { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
   { { "n", "v" }, "<C-/>", ":Lex<CR>" },
   { { "n", "t" }, "<C-\\>", [[<cmd>lua require('FTerm').toggle()<CR>]] },
-  { "n", "<C-o>", [[<cmd>lua require('oil').toggle_float()<CR>]]},
+  { "n", "<C-e>", [[<cmd>lua require('oil').open()<CR>]]},
+  { "n", "<C-O>", [[<cmd>lua require('oil').toggle_float()<CR>]]},
   -- move line
   { "v", "J", ":m '>+1<CR>gv=gv" },
   { "v", "K", ":m '<-2<CR>gv=gv" },
@@ -64,6 +65,7 @@ local keymaps = {
   { "n", "<leader>gd", ":Telescope lsp_definitions<CR>", "LSP definitions" },
   { "n", "<leader>gr", ":Telescope lsp_references<CR>", "LSP references" },
   { "n", "<leader>fs", ":Telescope lsp_document_symbols<CR>", "LSP symbols" },
+  { "n", "<leader>h",   ":Telescope highlights<CR>", "LSP symbols" },
   -- lsp
   { { "n" }, "K", vim.lsp.buf.hover },
   { { "n", "v" }, "<C-Space>", vim.lsp.buf.code_action }
@@ -238,8 +240,14 @@ do
   }
   require"FTerm".setup {
     border = "rounded",
+    hl = "FTerm",
   }
   require"oil".setup {
+    columns = {
+      { "mtime", highlight = "Comment" },
+      { "size", highlight = "Label" },
+      { "icon", highlight = "Normal" },
+    },
     default_file_explorer = false,
     win_options = {
       signcolumn = "no",
@@ -288,4 +296,7 @@ vim.cmd[[set path+=**]]
 vim.cmd[[autocmd VimResized * :wincmd =]]
 vim.cmd[[autocmd WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "netrw"|q|endif]]
 vim.cmd[[set wildmenu]]
-vim.cmd[[colorscheme tokyonight-night]]
+vim.cmd[[colorscheme gruvbox-material]]
+--[[ #highlights ]]--
+vim.cmd[[hi! link FloatBorder TelescopeBorder]]
+vim.cmd[[hi! link NormalFloat Normal]]
