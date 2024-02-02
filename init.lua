@@ -250,6 +250,8 @@ do
     },
     default_file_explorer = false,
     win_options = {
+      number = false,
+      relativenumber = false,
       signcolumn = "no",
       conceallevel = 3,
       concealcursor = "nvic",
@@ -300,3 +302,5 @@ vim.cmd[[colorscheme gruvbox-material]]
 --[[ #highlights ]]--
 vim.cmd[[hi! link FloatBorder TelescopeBorder]]
 vim.cmd[[hi! link NormalFloat Normal]]
+vim.cmd[[hi! link FloatTitle Title]]
+vim.cmd[[hi! link TelescopeTitle Title]]
