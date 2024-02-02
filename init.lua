@@ -53,9 +53,9 @@ local keymaps = {
   {"n", "<A-[>", ":tabprevious<CR>"},
   {"n", "<A-]>", ":tabnext<CR>"},
   -- buffer control
-  {"n", "<Tab>", ":bnext <CR>"},
-  {"n", "<S-Tab>", ":bprevious <CR>"},
-  {"n", "<A-Tab>", ":bdelete! <CR>"},
+  --{"n", "<Tab>", ":bnext <CR>"},
+  --{"n", "<S-Tab>", ":bprevious <CR>"},
+  --{"n", "<A-Tab>", ":bdelete! <CR>"},
   -- telescope
   { "n", "<C-p>", ":Telescope find_files<CR>", "Find files" },
   { "n", "<C-g>", ":Telescope git_", "Git commands" },
@@ -161,6 +161,12 @@ local helpers = {
   apply_keymaps = function (keymaps)
     for _, m in pairs(keymaps) do vim.keymap.set(m[1], m[2], m[3], { noremap = true, silent = false, desc = m[4] } ) end
   end,
+  apply_highlights = function (highlights)
+    for hi, link in pairs(highlights) do vim.cmd("hi clear " .. hi) vim.cmd("hi link " .. hi .. " " ..link) end
+  end,
+  apply_icons = function (icons)
+    for hl, icon in pairs(icons) do vim.fn.sign_define(hl, { text = icon, texthl = hl }) end
+  end
 }
 
 --[[ #plugins install ]]--
@@ -219,29 +225,26 @@ do
   }
   require"lualine".setup {
     options = {
-      component_separators = { left = '╲', right = '╱'},
-      section_separators = { left = '', right = ''},
-      --component_separators = { left = '╲', right = '|'},
-      --section_separators = { left = " ", right = " "},
+      --component_separators = { left = '╲', right = '╱'},
+      --section_separators = { left = '', right = ''},
+      component_separators = { left = '╲╲', right = '╲╲'},
+      section_separators = { left = " ", right = " "},
     },
     sections = {
       lualine_a = { "mode", "branch" },
       lualine_b = { "diff", "diagnostics" },
       lualine_c = { { "filename", path = 1 } },
-      lualine_x = { "encoding", "filetype" },
-      lualine_y = { "selectioncount", "progress" },
-      lualine_z = { "location" },
+      lualine_x = { "encoding" },
+      lualine_y = { "selectioncount", "filetype" },
+      lualine_z = { "location", "progress" },
     },
     tabline = {
-      lualine_c = { { "buffers", max_length = vim.o.columns } },
+      lualine_b = { { "buffers", max_length = vim.o.columns } },
       lualine_z = { { "tabs", use_mode_colors = true } },
     },
     extensions = { "oil" },
   }
-  require"FTerm".setup {
-    border = "rounded",
-    hl = "FTerm",
-  }
+  require"FTerm".setup { border = "rounded" }
   require"oil".setup {
     columns = {
       { "mtime", highlight = "Comment" },
@@ -276,13 +279,13 @@ do
     snippet = { expand = function(args) require"luasnip".lsp_expand(args.body) end },
     formatting = { format = function(_, i) local kind = i.kind i.kind = (icons.autocomplete[kind] or "?") i.menu = "" .. kind return i end },
     mapping = {
-      ["<C-n>"] = cmp.mapping.select_next_item(),
-      ["<C-p>"] = cmp.mapping.select_prev_item(),
+      ["<Tab>"] = cmp.mapping.select_next_item(),
+      ["<S-Tab>"] = cmp.mapping.select_prev_item(),
       ["<C-b>"] = cmp.mapping.scroll_docs(-4),
       ["<C-f>"] = cmp.mapping.scroll_docs(4),
       ["<C-Space>"] = cmp.mapping.complete(),
-      ["<C-e>"] = cmp.mapping.abort(),
-      ['<CR>'] = cmp.mapping.confirm({ select = false }),
+      ["<C-c>"] = cmp.mapping.abort(),
+      ["<CR>"] = cmp.mapping.confirm({ select = false }),
     },
   }
   local alpha_th = require"alpha.themes.theta"
@@ -293,14 +296,22 @@ end
 --[[ #apply ]]--
 helpers.apply_settings(globals, options)
 helpers.apply_keymaps(keymaps)
-for hl, icon in pairs(icons.diagnostics) do vim.fn.sign_define(hl, { text = icon, texthl = hl }) end
+helpers.apply_icons(icons.diagnostics)
 vim.cmd[[set path+=**]]
 vim.cmd[[autocmd VimResized * :wincmd =]]
 vim.cmd[[autocmd WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "netrw"|q|endif]]
 vim.cmd[[set wildmenu]]
-vim.cmd[[colorscheme gruvbox-material]]
+vim.cmd[[colorscheme horizon]]
+
 --[[ #highlights ]]--
-vim.cmd[[hi! link FloatBorder TelescopeBorder]]
-vim.cmd[[hi! link NormalFloat Normal]]
-vim.cmd[[hi! link FloatTitle Title]]
-vim.cmd[[hi! link TelescopeTitle Title]]
+helpers.apply_highlights {
+  TelescopeTitle = "Title",
+  TelescopeResultsTitle = "Title",
+  TelescopePreviewTitle = "Title",
+  TelescopePromptTitle = "Title",
+  TelescopeNormal = "Normal",
+  TelescopeBorder = "Conditional",
+  FloatBorder = "TelescopeBorder",
+  NormalFloat = "TelescopeNormal",
+  FloatTitle = "TelescopeTitle",
+}
