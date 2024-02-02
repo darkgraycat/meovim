@@ -29,6 +29,7 @@ local keymaps = {
   { "v", "<leader>y", [["+y]] },
   { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
   { { "n", "v" }, "<C-/>", ":Lex<CR>" },
+  { { "n", "t" }, "<C-\\>", [[<cmd>lua require('FTerm').toggle()<CR>]] },
   { "n", "<C-o>", [[<cmd>lua require('oil').toggle_float()<CR>]]},
   -- move line
   { "v", "J", ":m '>+1<CR>gv=gv" },
@@ -179,7 +180,7 @@ require("lazy").setup({
   { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
   { "nvim-lualine/lualine.nvim", dependencies = { "nvim-tree/nvim-web-devicons" } },
   { "stevearc/oil.nvim", dependencies = { "nvim-tree/nvim-web-devicons" } },
-  { "akinsho/toggleterm.nvim" },
+  { "numToStr/FTerm.nvim" },
   -- content
   { "nvim-treesitter/nvim-treesitter" },
   { "williamboman/mason.nvim" },
@@ -201,41 +202,18 @@ do
     defaults = {
       wrap_results = false,
       path_display = { "smart" },
-      borderchars = { " ", " ", " ", " ", " ", " ", " ", " " },
       file_ignore_patterns = { "node_modules/.*", "build/.*", "dist/.*" },
     },
     pickers = {
       find_files = { layout_strategy = "horizontal" },
       live_grep = { layout_strategy = "horizontal" },
       buffers = { layout_strategy = "vertical" },
-      diagnostics = { layout_strategy = "vertical", theme = "ivy" },
+      diagnostics = { layout_strategy = "vertical" },
       git_status = { layout_strategy = "vertical" },
       lsp_references = { theme = "cursor", jump_type = "never", path_display = { "short" } },
       lsp_definitions = { theme = "cursor", jump_type = "never", path_display = { "short" } },
-      lsp_document_symbols = { theme = "dropdown" },
+      lsp_document_symbols = { layout_strategy = "vertical" },
     },
-  }
-  require"oil".setup {
-    default_file_explorer = false,
-    win_options = {
-      signcolumn = "no",
-      conceallevel = 3,
-      concealcursor = "nvic",
-    },
-    float = {
-      border = "solid",
-      padding = 2,
-      max_width = 120,
-      max_height = 40,
-    },
-  }
-  require"toggleterm".setup {
-    open_mapping = [[<c-\>]],
-    size = 20,
-    direction = "float",
-    float_opts = { border = "solid" },
-    highlights = { NormalFloat = { guibg = "" }},
-    persist_mode = true,
   }
   require"lualine".setup {
     options = {
@@ -247,8 +225,8 @@ do
     sections = {
       lualine_a = { "mode", "branch" },
       lualine_b = { "diff", "diagnostics" },
-      lualine_c = { { "filename", path = 4 } },
-      lualine_x = { "encoding", "fileformat", "filetype" },
+      lualine_c = { { "filename", path = 1 } },
+      lualine_x = { "encoding", "filetype" },
       lualine_y = { "selectioncount", "progress" },
       lualine_z = { "location" },
     },
@@ -257,6 +235,23 @@ do
       lualine_z = { { "tabs", use_mode_colors = true } },
     },
     extensions = { "oil" },
+  }
+  require"FTerm".setup {
+    border = "rounded",
+  }
+  require"oil".setup {
+    default_file_explorer = false,
+    win_options = {
+      signcolumn = "no",
+      conceallevel = 3,
+      concealcursor = "nvic",
+    },
+    float = {
+      border = "rounded",
+      padding = 2,
+      max_width = 120,
+      max_height = 40,
+    },
   }
   require"mason".setup {}
   require"mason-lspconfig".setup {}
@@ -293,4 +288,4 @@ vim.cmd[[set path+=**]]
 vim.cmd[[autocmd VimResized * :wincmd =]]
 vim.cmd[[autocmd WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "netrw"|q|endif]]
 vim.cmd[[set wildmenu]]
-vim.cmd[[colorscheme gruvbox-material]]
+vim.cmd[[colorscheme tokyonight-night]]
