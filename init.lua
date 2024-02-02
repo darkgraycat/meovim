@@ -30,6 +30,7 @@ local keymaps = {
   { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
   { { "n", "v" }, "<C-/>", ":Lex<CR>" },
   { { "n", "t" }, "<C-\\>", [[<cmd>lua require('FTerm').toggle()<CR>]] },
+  { "t", "<C-c><C-c>", [[<cmd>lua require('FTerm').close()<CR>]] },
   { "n", "<C-e>", [[<cmd>lua require('oil').open()<CR>]]},
   { "n", "<C-O>", [[<cmd>lua require('oil').toggle_float()<CR>]]},
   -- move line
@@ -53,9 +54,9 @@ local keymaps = {
   {"n", "<A-[>", ":tabprevious<CR>"},
   {"n", "<A-]>", ":tabnext<CR>"},
   -- buffer control
-  --{"n", "<Tab>", ":bnext <CR>"},
-  --{"n", "<S-Tab>", ":bprevious <CR>"},
-  --{"n", "<A-Tab>", ":bdelete! <CR>"},
+  {"n", "<BS>", ":bnext <CR>"},
+  {"n", "<S-BS>", ":bprevious <CR>"},
+  {"n", "<C-BS>", ":bdelete! <CR>"},
   -- telescope
   { "n", "<C-p>", ":Telescope find_files<CR>", "Find files" },
   { "n", "<C-g>", ":Telescope git_", "Git commands" },
