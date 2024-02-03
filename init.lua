@@ -47,8 +47,8 @@ local keymaps = {
   { "n", "<A-Down>",  ":horizontal resize +3<CR>"},
   { "n", "<A-Up>",    ":horizontal resize -3<CR>"},
   -- tabline control
-  { "n", "<BS>",   ":bnext <CR>"},
-  { "n", "<S-BS>", ":bprevious <CR>"},
+  { "n", "<S-BS>",   ":bnext <CR>"},
+  { "n", "<BS>", ":bprevious <CR>"},
   { "n", "<C-BS>", ":bdelete! <CR>"},
   -- tabs control
   { "n", "<A-=>", ":tabnew<CR>"},
@@ -143,11 +143,11 @@ local options = {
 --[[ #icons ]]--
 local icons = {
   autocomplete = {
-    Text = "󰦨", Method = "󰆧", Function = "󰊕", Constructor = "", Field = "󰇽",
-    Variable = "󰫧", Class = "󰠱", Interface = "", Module = "", Property = "󰜢",
-    Unit = "", Value = "󰎠", Enum = "", Keyword = "󰌋", Snippet = "",
-    Color = "󰏘", File = "󰈙", Reference = "", Folder = "󰉋", EnumMember = "",
-    Constant = "󰏿", Struct = "", Event = "", Operator = "󰆕", TypeParameter = "󰅲",
+    Text = "󰦨 ", Method = "󰅲 ", Function = "󰊕 ", Constructor = " ", Field = " ",
+    Variable = "󰫧 ", Class = "󰠱 ", Interface = " ", Module = " ", Property = " ",
+    Unit = " ", Value = "󰎠 ", Enum = " ", Keyword = "󰌋 ", Snippet = " ",
+    Color = "󰏘 ", File = "󰈙 ", Reference = "", Folder = "󰉋", EnumMember = " ",
+    Constant = "󰏿 ", Struct = " ", Event = " ", Operator = "󰆕 ", TypeParameter = " ",
   },
   diagnostics = {
     DiagnosticSignError = "",
@@ -247,8 +247,8 @@ do
       lualine_z = { "location", "progress" },
     },
     tabline = {
-      lualine_b = { { "buffers", max_length = vim.o.columns } },
-      lualine_z = { { "tabs", use_mode_colors = true } },
+      lualine_a = { { "buffers", max_length = vim.o.columns } },
+      lualine_y = { { "tabs", use_mode_colors = true } },
     },
     extensions = { "oil" },
   }
@@ -286,8 +286,13 @@ do
     sources = { { name = "nvim_lsp" }, { name = "buffer" }, { name = "luasnip" } },
     snippet = { expand = function(args) require"luasnip".lsp_expand(args.body) end },
     formatting = { format = function(_, i) local kind = i.kind i.kind = (icons.autocomplete[kind] or "?") i.menu = "" .. kind return i end },
+    window = {
+      completion = cmp.config.window.bordered(),
+      documentation = cmp.config.window.bordered(),
+    },
     mapping = {
       ["<Tab>"] = cmp.mapping.select_next_item(),
+      --["K"] = cmp.mapping.open_docs(),
       ["<S-Tab>"] = cmp.mapping.select_prev_item(),
       ["<C-c>"] = cmp.mapping.abort(),
       ["<CR>"] = cmp.mapping.confirm({ select = false }),
@@ -313,7 +318,7 @@ helpers.apply_highlights {
   TelescopeTitle = "Title",        TelescopeResultsTitle  = "TelescopeTitle", TelescopePreviewTitle   = "TelescopeTitle", TelescopePromptTitle   = "TelescopeTitle",
   TelescopeNormal = "Normal",      TelescopeResultsNormal = "TelescopeNormal", TelescopePreviewNormal = "TelescopeNormal", TelescopePromptNormal = "TelescopeNormal",
   TelescopeBorder = "Conditional", TelescopeResultsBorder = "TelescopeBorder", TelescopePreviewBorder = "TelescopeBorder", TelescopePromptBorder = "TelescopeBorder",
-  FloatBorder = "TelescopeBorder",
-  NormalFloat = "TelescopeNormal",
   FloatTitle = "TelescopeTitle",
+  NormalFloat = "TelescopeNormal",
+  FloatBorder = "TelescopeBorder",
 }
