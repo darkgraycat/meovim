@@ -28,9 +28,10 @@ local keymaps = {
   { { "n", "v" }, "<C-j>", "5jzz" },
   { { "n", "v" }, "<C-k>", "5kzz" },
   -- buffer helpers
-  { "i", "[", "[]<left>" }, { "i", "[]", "[]<left>" }, { "v", "[]", "<Esc>`>a]<Esc>`<i[" },
-  { "i", "(", "()<left>" }, { "i", "()", "()<left>" }, { "v", "()", "<Esc>`>a)<Esc>`<i(" },
-  { "i", "{", "{}<left>" }, { "i", "{}", "{}<left>" }, { "v", "{}", "<Esc>`>a}<Esc>`<i{" },
+  { "i", "{", "{}<left>" }, { "i", "{}", "{}<left>" }, { "i", "{<CR>", "{<CR>}<Esc>O" }, { "v", "{}", "<Esc>`>a}<Esc>`<i{" },
+  { "i", "[", "[]<left>" }, { "i", "[]", "[]<left>" }, { "i", "[<CR>", "[<CR>]<Esc>O" }, { "v", "[]", "<Esc>`>a]<Esc>`<i[" },
+  { "i", "(", "()<left>" }, { "i", "()", "()<left>" }, { "i", "(<CR>", "(<CR>)<Esc>O" }, { "v", "()", "<Esc>`>a)<Esc>`<i(" },
+  { "i", "`", "``<left>" }, { "i", "``", "``<left>" }, { "i", "`<CR>", "`<CR>`<Esc>O" }, { "v", "``", "<Esc>`>a`<Esc>`<i`" },
   { "i", "'", "''<left>" }, { "i", "''", "''<left>" }, { "v", "''", "<Esc>`>a'<Esc>`<i'" },
   { "i", '"', '""<left>' }, { "i", '""', '""<left>' }, { "v", '""', '<Esc>`>a"<Esc>`<i"' },
   { "i", "/*", "/**/<left><left>" }, { "v", "/*", "<Esc>`>a*/<Esc>`<i/*" },
@@ -47,9 +48,9 @@ local keymaps = {
   { "n", "<A-Down>",  ":horizontal resize +3<CR>"},
   { "n", "<A-Up>",    ":horizontal resize -3<CR>"},
   -- tabline control
-  { "n", "<S-BS>",   ":bnext <CR>"},
-  { "n", "<BS>", ":bprevious <CR>"},
-  { "n", "<C-BS>", ":bdelete! <CR>"},
+  { "n", "§",   ":bnext <CR>"},
+  { "n", "±", ":bprevious <CR>"},
+  { "n", "<C-§>", ":<C-U>bprevious <bar> bdelete #<CR>" },
   -- tabs control
   { "n", "<A-=>", ":tabnew<CR>"},
   { "n", "<A-->", ":tabclose<CR>"},
