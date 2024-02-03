@@ -16,6 +16,7 @@ local meovim = {
   [[                    ░▒▓▓▒▒▓█▓░                    ]],
   [[                    ░▒▒░░▒▒░▒░                    ]],
 }
+local colors = "nordic"
 
 --[[ #keymaps ]]--
 local keymaps = {
@@ -72,6 +73,7 @@ local keymaps = {
   { "n", "<leader>fd", ":Telescope lsp_definitions<CR>", "LSP definitions" },
   { "n", "<leader>fs", ":Telescope lsp_document_symbols<CR>", "LSP symbols" },
   { "n", "<leader>fR", ":Telescope resume<CR>", "Resume" },
+  { "n", "<leader>h", ":Telescope highlights<CR>", "Resume" },
 }
 
 --[[ #globals ]]--
@@ -189,22 +191,22 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   -- ui
   { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
-  { "nvim-lualine/lualine.nvim", dependencies = { "nvim-tree/nvim-web-devicons" } },
-  { "stevearc/oil.nvim", dependencies = { "nvim-tree/nvim-web-devicons" } },
+  { "nvim-lualine/lualine.nvim",     dependencies = { "nvim-tree/nvim-web-devicons" } },
+  { "stevearc/oil.nvim",             dependencies = { "nvim-tree/nvim-web-devicons" } },
   { "numToStr/FTerm.nvim" },
   -- content
   { "nvim-treesitter/nvim-treesitter" },
-  { "williamboman/mason.nvim" },
-  { "williamboman/mason-lspconfig.nvim" },
   { "neovim/nvim-lspconfig" },
-  { "hrsh7th/cmp-nvim-lsp" },
-  { "hrsh7th/nvim-cmp" },
+  { "williamboman/mason.nvim",       dependencies = { "williamboman/mason-lspconfig.nvim"} },
+  { "hrsh7th/cmp-nvim-lsp",          dependencies = { "hrsh7th/nvim-cmp"} },
   { "L3MON4D3/LuaSnip" },
   -- misc & themes
   { "goolord/alpha-nvim" },
-  { "folke/tokyonight.nvim" },
-  { "akinsho/horizon.nvim" },
-  { "sainnhe/gruvbox-material" },
+  { "folke/tokyonight.nvim",    name = "tokyonight" },
+  { "akinsho/horizon.nvim",     name = "horizon" },
+  { "sainnhe/gruvbox-material", name = "gruvbox" },
+  { "rose-pine/neovim",         name = "rose-pine" },
+  { "AlexvZyl/nordic.nvim",     name = "nordic" }
 }, {})
 
 --[[ #plugins config ]]--
@@ -216,7 +218,7 @@ do
       file_ignore_patterns  = { "node_modules/.*", "build/.*", "dist/.*" },
       layout_config           = { prompt_position = "top" },
       selection_caret = "   ",
-      selection_strategy = 'reset',
+      sorting_strategy = 'ascending',
     },
     pickers = {
       find_files            = { layout_strategy = "horizontal" },
@@ -296,7 +298,7 @@ do
   require"alpha".setup(alpha_th.config)
 end
 
---[[ #apply ]]--
+--[[ #apply config ]]--
 helpers.apply_settings(globals, options)
 helpers.apply_keymaps(keymaps)
 helpers.apply_icons(icons.diagnostics)
@@ -304,16 +306,13 @@ vim.cmd[[set path+=**]]
 vim.cmd[[autocmd VimResized * :wincmd =]]
 vim.cmd[[autocmd WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "netrw"|q|endif]]
 vim.cmd[[set wildmenu]]
-vim.cmd[[colorscheme horizon]]
 
---[[ #highlights ]]--
+--[[ #colorscheme ]]--
+vim.cmd("colorscheme " .. colors)
 helpers.apply_highlights {
-  TelescopeTitle = "Title",
-  TelescopeResultsTitle = "Title",
-  TelescopePreviewTitle = "Title",
-  TelescopePromptTitle = "Title",
-  TelescopeNormal = "Normal",
-  TelescopeBorder = "Conditional",
+  TelescopeTitle = "Title",        TelescopeResultsTitle  = "TelescopeTitle", TelescopePreviewTitle   = "TelescopeTitle", TelescopePromptTitle   = "TelescopeTitle",
+  TelescopeNormal = "Normal",      TelescopeResultsNormal = "TelescopeNormal", TelescopePreviewNormal = "TelescopeNormal", TelescopePromptNormal = "TelescopeNormal",
+  TelescopeBorder = "Conditional", TelescopeResultsBorder = "TelescopeBorder", TelescopePreviewBorder = "TelescopeBorder", TelescopePromptBorder = "TelescopeBorder",
   FloatBorder = "TelescopeBorder",
   NormalFloat = "TelescopeNormal",
   FloatTitle = "TelescopeTitle",
