@@ -16,7 +16,7 @@ local meovim = {
   [[                    ░▒▓▓▒▒▓█▓░                    ]],
   [[                    ░▒▒░░▒▒░▒░                    ]],
 }
-local colors = "nordic"
+local colors = "horizon"
 
 --[[ #keymaps ]]--
 local keymaps = {
@@ -233,10 +233,10 @@ do
   }
   require"lualine".setup {
     options = {
-      --component_separators = { left = '╲', right = '╱'},
-      --section_separators = { left = '', right = ''},
-      component_separators = { left = '╲╲', right = '╲╲'},
-      section_separators = { left = " ", right = " "},
+      component_separators = { left = '╲', right = '╱'},
+      section_separators = { left = '', right = ''},
+      --component_separators = { left = '╲╲', right = '╲╲'},
+      --section_separators = { left = " ", right = " "},
     },
     sections = {
       lualine_a = { "mode", "branch" },
@@ -279,9 +279,9 @@ do
   local lspconfig = require"lspconfig"
   local cmp = require"cmp"
   local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
-  capabilities.textDocument.completion.completionItem.snippetSupport = false
   local lsps = { "lua_ls", "tsserver", "rust_analyzer", "intelephense" }
   for _, lsp in ipairs(lsps) do lspconfig[lsp].setup({ capabilities = capabilities }) end
+  vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
   cmp.setup {
     sources = { { name = "nvim_lsp" }, { name = "buffer" }, { name = "luasnip" } },
     snippet = { expand = function(args) require"luasnip".lsp_expand(args.body) end },
