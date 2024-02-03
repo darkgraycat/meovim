@@ -28,11 +28,11 @@ local keymaps = {
   { { "n", "v" }, "<C-j>", "5jzz" },
   { { "n", "v" }, "<C-k>", "5kzz" },
   -- buffer helpers
-  { "i", "[", "[]<left>" }, { "v", "[[", "<Esc>`>a]<Esc>`<i[" },
-  { "i", "(", "()<left>" }, { "v", "((", "<Esc>`>a)<Esc>`<i(" },
-  { "i", "{", "{}<left>" }, { "v", "{{", "<Esc>`>a}<Esc>`<i{" },
-  { "i", "'", "''<left>" }, { "v", "''", "<Esc>`>a'<Esc>`<i'" },
-  { "i", '"', '""<left>' }, { "v", '""', '<Esc>`>a"<Esc>`<i"' },
+  { "i", "[", "[]<left>" }, { "i", "[]", "[]<left>" }, { "v", "[]", "<Esc>`>a]<Esc>`<i[" },
+  { "i", "(", "()<left>" }, { "i", "()", "()<left>" }, { "v", "()", "<Esc>`>a)<Esc>`<i(" },
+  { "i", "{", "{}<left>" }, { "i", "{}", "{}<left>" }, { "v", "{}", "<Esc>`>a}<Esc>`<i{" },
+  { "i", "'", "''<left>" }, { "i", "''", "''<left>" }, { "v", "''", "<Esc>`>a'<Esc>`<i'" },
+  { "i", '"', '""<left>' }, { "i", '""', '""<left>' }, { "v", '""', '<Esc>`>a"<Esc>`<i"' },
   { "i", "/*", "/**/<left><left>" }, { "v", "/*", "<Esc>`>a*/<Esc>`<i/*" },
   { "v", "<leader>y", [["+y]] },
   { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
@@ -61,7 +61,7 @@ local keymaps = {
   { "t", "<C-c><C-c>", [[<cmd>lua require('FTerm').close()<CR>]] },
   { "n", "<C-e>", [[<cmd>lua require('oil').open()<CR>]]},
   { "n", "<C-O>", [[<cmd>lua require('oil').toggle_float()<CR>]]},
-  { "n", "<leader>A", ":Alpha<CR>" },
+  { "n", "<C-w>a", ":Alpha<CR>" },
   -- telescope
   { "n", "<C-p>",      ":Telescope find_files theme=dropdown layout_config={mirror=true}<CR>", "Find files" },
   { "n", "<C-g>",      ":Telescope git_", "Git commands" },
@@ -313,12 +313,15 @@ vim.cmd[[autocmd WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "
 vim.cmd[[set wildmenu]]
 
 --[[ #colorscheme ]]--
-vim.cmd("colorscheme " .. colors)
-helpers.apply_highlights {
-  TelescopeTitle = "Title",        TelescopeResultsTitle  = "TelescopeTitle", TelescopePreviewTitle   = "TelescopeTitle", TelescopePromptTitle   = "TelescopeTitle",
-  TelescopeNormal = "Normal",      TelescopeResultsNormal = "TelescopeNormal", TelescopePreviewNormal = "TelescopeNormal", TelescopePromptNormal = "TelescopeNormal",
-  TelescopeBorder = "Conditional", TelescopeResultsBorder = "TelescopeBorder", TelescopePreviewBorder = "TelescopeBorder", TelescopePromptBorder = "TelescopeBorder",
-  FloatTitle = "TelescopeTitle",
-  NormalFloat = "TelescopeNormal",
-  FloatBorder = "TelescopeBorder",
-}
+function Colorscheme(colorscheme)
+  vim.cmd("colorscheme " .. colorscheme)
+  helpers.apply_highlights {
+    TelescopeTitle = "Title",        TelescopeResultsTitle  = "TelescopeTitle",  TelescopePreviewTitle  = "TelescopeTitle",  TelescopePromptTitle  = "TelescopeTitle",
+    TelescopeNormal = "Normal",      TelescopeResultsNormal = "TelescopeNormal", TelescopePreviewNormal = "TelescopeNormal", TelescopePromptNormal = "TelescopeNormal",
+    TelescopeBorder = "Conditional", TelescopeResultsBorder = "TelescopeBorder", TelescopePreviewBorder = "TelescopeBorder", TelescopePromptBorder = "TelescopeBorder",
+    FloatTitle = "TelescopeTitle",
+    NormalFloat = "TelescopeNormal",
+    FloatBorder = "TelescopeBorder",
+  }
+end
+Colorscheme(colors)
