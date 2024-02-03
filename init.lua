@@ -19,44 +19,48 @@ local meovim = {
 
 --[[ #keymaps ]]--
 local keymaps = {
-  -- control
+  -- buffer control
   { { "i", "c" }, "jk", "<Esc>" },
-  { "i", "<C-c>", "<Esc>" },
+  { "x", "<C-c>", "<Esc>" },
   { { "n", "v" }, "<C-d>", "<C-d>zz" },
   { { "n", "v" }, "<C-u>", "<C-u>zz" },
   { { "n", "v" }, "<C-j>", "5jzz" },
   { { "n", "v" }, "<C-k>", "5kzz" },
-  { "v", "<leader>y", [["+y]] },
-  { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
-  { { "n", "v" }, "<C-/>", ":Lex<CR>" },
-  { { "n", "t" }, "<C-\\>", [[<cmd>lua require('FTerm').toggle()<CR>]] },
-  { "t", "<C-c><C-c>", [[<cmd>lua require('FTerm').close()<CR>]] },
-  { "n", "<C-e>", [[<cmd>lua require('oil').open()<CR>]]},
-  { "n", "<C-O>", [[<cmd>lua require('oil').toggle_float()<CR>]]},
-  -- move line
-  { "v", "J", ":m '>+1<CR>gv=gv" },
-  { "v", "K", ":m '<-2<CR>gv=gv" },
-  -- parenthesis
+  -- buffer helpers
   { "i", "[", "[]<left>" }, { "v", "[[", "<Esc>`>a]<Esc>`<i[" },
   { "i", "(", "()<left>" }, { "v", "((", "<Esc>`>a)<Esc>`<i(" },
   { "i", "{", "{}<left>" }, { "v", "{{", "<Esc>`>a}<Esc>`<i{" },
   { "i", "'", "''<left>" }, { "v", "''", "<Esc>`>a'<Esc>`<i'" },
   { "i", '"', '""<left>' }, { "v", '""', '<Esc>`>a"<Esc>`<i"' },
   { "i", "/*", "/**/<left><left>" }, { "v", "/*", "<Esc>`>a*/<Esc>`<i/*" },
-  -- split window control
+  { "v", "<leader>y", [["+y]] },
+  { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
+  { "v", "J", ":m '>+1<CR>gv=gv" },
+  { "v", "K", ":m '<-2<CR>gv=gv" },
+  -- lsp helpers
+  { { "n" }, "K", vim.lsp.buf.hover },
+  { { "n", "v" }, "<leader>ca", vim.lsp.buf.code_action },
+  -- window control
   { "n", "<A-Left>",  ":vertical resize +3<CR>"},
   { "n", "<A-Right>", ":vertical resize -3<CR>"},
   { "n", "<A-Down>",  ":horizontal resize +3<CR>"},
   { "n", "<A-Up>",    ":horizontal resize -3<CR>"},
-  -- tabs navigation
+  -- tabline control
+  { "n", "<BS>",   ":bnext <CR>"},
+  { "n", "<S-BS>", ":bprevious <CR>"},
+  { "n", "<C-BS>", ":bdelete! <CR>"},
+  -- tabs control
   { "n", "<A-=>", ":tabnew<CR>"},
   { "n", "<A-->", ":tabclose<CR>"},
   { "n", "<A-[>", ":tabprevious<CR>"},
   { "n", "<A-]>", ":tabnext<CR>"},
-  -- tabline navigation
-  { "n", "<BS>",   ":bnext <CR>"},
-  { "n", "<S-BS>", ":bprevious <CR>"},
-  { "n", "<C-BS>", ":bdelete! <CR>"},
+  -- gui control
+  { { "n", "v" }, "<C-/>", ":Lex<CR>" },
+  { { "n", "t" }, "<C-\\>", [[<cmd>lua require('FTerm').toggle()<CR>]] },
+  { "t", "<C-c><C-c>", [[<cmd>lua require('FTerm').close()<CR>]] },
+  { "n", "<C-e>", [[<cmd>lua require('oil').open()<CR>]]},
+  { "n", "<C-O>", [[<cmd>lua require('oil').toggle_float()<CR>]]},
+  { "n", "<leader>A", ":Alpha<CR>" },
   -- telescope
   { "n", "<C-p>",      ":Telescope find_files theme=dropdown layout_config={mirror=true}<CR>", "Find files" },
   { "n", "<C-g>",      ":Telescope git_", "Git commands" },
@@ -68,9 +72,6 @@ local keymaps = {
   { "n", "<leader>fd", ":Telescope lsp_definitions<CR>", "LSP definitions" },
   { "n", "<leader>fs", ":Telescope lsp_document_symbols<CR>", "LSP symbols" },
   { "n", "<leader>fR", ":Telescope resume<CR>", "Resume" },
-  -- lsp
-  { { "n" }, "K", vim.lsp.buf.hover },
-  { { "n", "v" }, "<C-Space>", vim.lsp.buf.code_action }
 }
 
 --[[ #globals ]]--
@@ -210,10 +211,12 @@ require("lazy").setup({
 do
   require"telescope".setup {
     defaults = {
-      wrap_results = false,
-      path_display = { "smart" },
-      file_ignore_patterns = { "node_modules/.*", "build/.*", "dist/.*" },
-      layout_config = { prompt_position = "top" },
+      wrap_results          = false,
+      path_display          = { "smart" },
+      file_ignore_patterns  = { "node_modules/.*", "build/.*", "dist/.*" },
+      layout_config           = { prompt_position = "top" },
+      selection_caret = "   ",
+      selection_strategy = 'reset',
     },
     pickers = {
       find_files            = { layout_strategy = "horizontal" },
@@ -284,9 +287,6 @@ do
     mapping = {
       ["<Tab>"] = cmp.mapping.select_next_item(),
       ["<S-Tab>"] = cmp.mapping.select_prev_item(),
-      ["<C-b>"] = cmp.mapping.scroll_docs(-4),
-      ["<C-f>"] = cmp.mapping.scroll_docs(4),
-      ["<C-Space>"] = cmp.mapping.complete(),
       ["<C-c>"] = cmp.mapping.abort(),
       ["<CR>"] = cmp.mapping.confirm({ select = false }),
     },
