@@ -37,7 +37,7 @@ local keymaps = {
   { "i", "'", "''<left>" }, { "i", "''", "''" }, { "v", "''", "<Esc>`>a'<Esc>`<i'<Esc>gv" },
   { "i", '"', '""<left>' }, { "i", '""', '""' }, { "v", '""', '<Esc>`>a"<Esc>`<i"<Esc>gv' },
   { "i", "/*", "/**/<left><left>" }, { "v", "/*", "<Esc>`>a*/<Esc>`<i/*" },
-  { "i", "<C-;>", "<Esc>A;<CR>"}, { "i", "<C-,>", "<Esc>bi"}, { "i", "<C-.>", "<Esc>ea" },
+  { "i", ";;", "<Esc>A;<CR>"}, { "i", "<C-,>", "<Esc>bi"}, { "i", "<C-.>", "<Esc>ea" },
   { "v", "<leader>y", [["+y]] },
   { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
   { "v", "J", ":m '>+1<CR>gv=gv" },
@@ -301,7 +301,18 @@ do
     },
   }
   local alpha_th = require"alpha.themes.theta"
+  local alpha_db = require"alpha.themes.dashboard"
   alpha_th.header.val = meovim
+  alpha_th.buttons.val = {
+    { type = "text", val = "╭"..string.rep("─", 48).."╮", opts = { hl = "TelescopeBorder", position = "center" } },
+    alpha_db.button("e", "󰝒   New file",        ":ene <BAR> startinsert <CR>"),
+    alpha_db.button("f", "󰱼   Find file",       ":Telescope find_files <CR>"),
+    alpha_db.button("g", "󱎸   Find text",       ":Telescope live_grep <CR>"),
+    alpha_db.button("r", "󰁯   Restore session", ":lua SessionLoad() <CR>"),
+    alpha_db.button("s", "   Settings",        ":e ~/.config/nvim/init.lua<CR>"),
+    alpha_db.button("q", "󰄛   Quit",            ":qa<CR>"),
+    { type = "text", val = "╰"..string.rep("─", 48).."╯", opts = { hl = "TelescopeBorder", position = "center" } },
+  }
   require"alpha".setup(alpha_th.config)
 end
 
@@ -328,18 +339,17 @@ function SessionLoad()
   else vim.notify("No sessions to load") end
 end
 vim.cmd[[autocmd VimLeave *        lua if vim.fn.confirm("Save session?", "&Yes\n&No", 2) == 1 then SessionSave() end]]
-vim.cmd[[autocmd VimEnter * nested lua if vim.fn.confirm("Load session?", "&Yes\n&No", 2) == 1 then SessionLoad() end]]
 
 --[[ #colorscheme ]]--
 function Colorscheme(colorscheme)
   vim.cmd("colorscheme " .. colorscheme)
   helpers.apply_highlights {
-    TelescopeTitle = "Title",        TelescopeResultsTitle  = "TelescopeTitle",  TelescopePreviewTitle  = "TelescopeTitle",  TelescopePromptTitle  = "TelescopeTitle",
-    TelescopeNormal = "Normal",      TelescopeResultsNormal = "TelescopeNormal", TelescopePreviewNormal = "TelescopeNormal", TelescopePromptNormal = "TelescopeNormal",
-    TelescopeBorder = "Conditional", TelescopeResultsBorder = "TelescopeBorder", TelescopePreviewBorder = "TelescopeBorder", TelescopePromptBorder = "TelescopeBorder",
-    FloatTitle = "TelescopeTitle",
-    NormalFloat = "TelescopeNormal",
-    FloatBorder = "TelescopeBorder",
+    FloatTitle = "Title",
+    NormalFloat = "Normal",
+    FloatBorder = "Function",
+    TelescopeTitle = "FloatTitle",   TelescopeResultsTitle  = "TelescopeTitle",  TelescopePreviewTitle  = "TelescopeTitle",  TelescopePromptTitle  = "TelescopeTitle",
+    TelescopeNormal = "NormalFloat", TelescopeResultsNormal = "TelescopeNormal", TelescopePreviewNormal = "TelescopeNormal", TelescopePromptNormal = "TelescopeNormal",
+    TelescopeBorder = "FloatBorder", TelescopeResultsBorder = "TelescopeBorder", TelescopePreviewBorder = "TelescopeBorder", TelescopePromptBorder = "TelescopeBorder",
   }
 end
 Colorscheme(colors)
