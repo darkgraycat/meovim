@@ -326,8 +326,8 @@ function SessionLoad()
   if vim.fn.filereadable(filename) == 1 then vim.cmd("source " .. filename)
   else vim.notify("No sessions to load") end
 end
-vim.cmd("autocmd VimEnter * nested lua SessionLoad()")
-vim.cmd("autocmd VimLeave * lua SessionSave()")
+vim.cmd[[autocmd VimLeave *        lua if vim.fn.confirm("Save session?", "&Yes\n&No", 2) == 1 then SessionSave() end]]
+vim.cmd[[autocmd VimEnter * nested lua if vim.fn.confirm("Load session?", "&Yes\n&No", 2) == 1 then SessionLoad() end]]
 
 --[[ #colorscheme ]]--
 function Colorscheme(colorscheme)
@@ -342,3 +342,15 @@ function Colorscheme(colorscheme)
   }
 end
 Colorscheme(colors)
+
+--function AskBeforeLeave()
+--    local choice = vim.fn.confirm('Do you want to save the session before leaving?', '&Yes\n&No\n&Cancel', 3)
+--    if choice == 1 then
+--        SessionSave()
+--    elseif choice == 2 then
+--        -- Do nothing, just leave Neovim
+--    elseif choice == 3 then
+--        -- Cancel leaving Neovim
+--        return true
+--    end
+--end
