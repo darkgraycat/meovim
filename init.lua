@@ -255,8 +255,8 @@ do
       --section_separators   = { left = " ", right = " "},
     },
     sections = {
-      lualine_a = { "mode", "branch" },
-      lualine_b = { "diff", "diagnostics" },
+      lualine_a = { "mode" },
+      lualine_b = { "diagnostics", "diff" },
       lualine_c = { { "filename", path = 1 } },
       lualine_x = { "encoding" },
       lualine_y = { "selectioncount", "filetype" },
@@ -264,7 +264,8 @@ do
     },
     tabline = {
       lualine_a = { { "buffers", max_length = vim.o.columns } },
-      lualine_y = { { "tabs", use_mode_colors = true } },
+      lualine_x = { "branch" },
+      lualine_z = { "tabs" },
     },
     extensions = { "oil" },
   }
