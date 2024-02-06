@@ -342,15 +342,3 @@ function Colorscheme(colorscheme)
   }
 end
 Colorscheme(colors)
-
---function AskBeforeLeave()
---    local choice = vim.fn.confirm('Do you want to save the session before leaving?', '&Yes\n&No\n&Cancel', 3)
---    if choice == 1 then
---        SessionSave()
---    elseif choice == 2 then
---        -- Do nothing, just leave Neovim
---    elseif choice == 3 then
---        -- Cancel leaving Neovim
---        return true
---    end
---end
