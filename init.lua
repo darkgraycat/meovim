@@ -16,7 +16,7 @@ local meovim = {
   [[                    ░▒▓▓▒▒▓█▓░                    ]],
   [[                    ░▒▒░░▒▒░▒░                    ]],
 }
-local colors = "horizon"
+local colors = "nordic"
 
 --[[ #keymaps ]]--
 local keymaps = {
@@ -25,17 +25,19 @@ local keymaps = {
   { "x", "<C-c>", "<Esc>" },
   { { "n", "v" }, "<C-d>", "<C-d>zz" },
   { { "n", "v" }, "<C-u>", "<C-u>zz" },
-  { { "n", "v" }, "<C-j>", "5jzz" },
-  { { "n", "v" }, "<C-k>", "5kzz" },
+  { { "n", "v" }, "<C-j>", "5j" },
+  { { "n", "v" }, "<C-k>", "5k" },
+  { { "n", "v" }, "<C-h>", "^" },
+  { { "n", "v" }, "<C-l>", "$" },
   -- buffer helpers
-  { "i", "{", "{}<left>" }, { "i", "{}", "{}" }, { "i", "{<CR>", "{<CR>}<Esc>O" }, { "v", "{}", "<Esc>`>a}<Esc>`<i{" },
-  { "i", "[", "[]<left>" }, { "i", "[]", "[]" }, { "i", "[<CR>", "[<CR>]<Esc>O" }, { "v", "[]", "<Esc>`>a]<Esc>`<i[" },
-  { "i", "(", "()<left>" }, { "i", "()", "()" }, { "i", "(<CR>", "(<CR>)<Esc>O" }, { "v", "()", "<Esc>`>a)<Esc>`<i(" },
-  { "i", "`", "``<left>" }, { "i", "``", "``" }, { "i", "`<CR>", "`<CR>`<Esc>O" }, { "v", "``", "<Esc>`>a`<Esc>`<i`" },
-  { "i", "'", "''<left>" }, { "i", "''", "''" }, { "v", "''", "<Esc>`>a'<Esc>`<i'" },
-  { "i", '"', '""<left>' }, { "i", '""', '""' }, { "v", '""', '<Esc>`>a"<Esc>`<i"' },
-  { "i", ";;", "<Esc>A;"},
+  { "i", "{", "{}<left>" }, { "i", "{}", "{}" }, { "i", "{<CR>", "{<CR>}<Esc>O" }, { "v", "{}", "<Esc>`>a}<Esc>`<i{<Esc>gv" },
+  { "i", "[", "[]<left>" }, { "i", "[]", "[]" }, { "i", "[<CR>", "[<CR>]<Esc>O" }, { "v", "[]", "<Esc>`>a]<Esc>`<i[<Esc>gv" },
+  { "i", "(", "()<left>" }, { "i", "()", "()" }, { "i", "(<CR>", "(<CR>)<Esc>O" }, { "v", "()", "<Esc>`>a)<Esc>`<i(<Esc>gv" },
+  { "i", "`", "``<left>" }, { "i", "``", "``" }, { "i", "`<CR>", "`<CR>`<Esc>O" }, { "v", "``", "<Esc>`>a`<Esc>`<i`<Esc>gv" },
+  { "i", "'", "''<left>" }, { "i", "''", "''" }, { "v", "''", "<Esc>`>a'<Esc>`<i'<Esc>gv" },
+  { "i", '"', '""<left>' }, { "i", '""', '""' }, { "v", '""', '<Esc>`>a"<Esc>`<i"<Esc>gv' },
   { "i", "/*", "/**/<left><left>" }, { "v", "/*", "<Esc>`>a*/<Esc>`<i/*" },
+  { "i", "<C-;>", "<Esc>A;<CR>"}, { "i", "<C-,>", "<Esc>bi"}, { "i", "<C-.>", "<Esc>ea" },
   { "v", "<leader>y", [["+y]] },
   { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
   { "v", "J", ":m '>+1<CR>gv=gv" },
@@ -44,25 +46,24 @@ local keymaps = {
   { { "n" }, "K", vim.lsp.buf.hover },
   { { "n", "v" }, "<leader>ca", vim.lsp.buf.code_action },
   -- window control
-  { "n", "<A-Left>",  ":vertical resize +3<CR>"},
-  { "n", "<A-Right>", ":vertical resize -3<CR>"},
-  { "n", "<A-Down>",  ":horizontal resize +3<CR>"},
-  { "n", "<A-Up>",    ":horizontal resize -3<CR>"},
+  { "n", "<A-Left>",  ":vertical resize +4<CR>"},
+  { "n", "<A-Right>", ":vertical resize -4<CR>"},
+  { "n", "<A-Down>",  ":horizontal resize +4<CR>"},
+  { "n", "<A-Up>",    ":horizontal resize -4<CR>"},
   -- tabline control
   { "n", "§",   ":bnext <CR>"},
   { "n", "±", ":bprevious <CR>"},
-  { "n", "<C-§>", ":<C-U>bprevious <bar> bdelete #<CR>" },
+  { "n", "d§", ":<C-U>bprevious <bar> bdelete #<CR>" },
   -- tabs control
   { "n", "<A-=>", ":tabnew<CR>"},
-  { "n", "<A-->", ":tabclose<CR>"},
   { "n", "<A-[>", ":tabprevious<CR>"},
   { "n", "<A-]>", ":tabnext<CR>"},
+  { "n", "d=", ":tabclose<CR>"},
   -- gui control
   { { "n", "v" }, "<C-/>", ":Lex<CR>" },
   { { "n", "t" }, "<C-\\>", [[<cmd>lua require('FTerm').toggle()<CR>]] },
   { "t", "<C-c><C-c>", [[<cmd>lua require('FTerm').close()<CR>]] },
-  { "n", "<C-e>", [[<cmd>lua require('oil').open()<CR>]]},
-  { "n", "<C-O>", [[<cmd>lua require('oil').toggle_float()<CR>]]},
+  { "n", "<C-o>", [[<cmd>lua require('oil').toggle_float()<CR>]]},
   { "n", "<C-w>a", ":Alpha<CR>" },
   -- telescope
   { "n", "<C-p>",      ":Telescope find_files theme=dropdown layout_config={mirror=true}<CR>", "Find files" },
@@ -75,7 +76,6 @@ local keymaps = {
   { "n", "<leader>fd", ":Telescope lsp_definitions<CR>", "LSP definitions" },
   { "n", "<leader>fs", ":Telescope lsp_document_symbols<CR>", "LSP symbols" },
   { "n", "<leader>fR", ":Telescope resume<CR>", "Resume" },
-  { "n", "<leader>h", ":Telescope highlights<CR>", "Resume" },
 }
 
 --[[ #globals ]]--
@@ -173,7 +173,20 @@ local helpers = {
   end,
   apply_icons = function (icons)
     for hl, icon in pairs(icons) do vim.fn.sign_define(hl, { text = icon, texthl = hl }) end
-  end
+  end,
+  session = {
+    sessions_dir = vim.fn.stdpath("config") .. "/.sessions",
+    filename = function () return helpers.session.sessions_dir .. "/" .. vim.fn.getcwd():gsub("/", "_") .. ".vim" end,
+    save = function () 
+      local filename = helpers.session.filename()
+      vim.cmd("mksession! " .. filename)
+    end,
+    load = function () 
+      local filename = helpers.session.filename()
+      if vim.fn.filereadable(filename) == 1 then vim.cmd("source " .. filename)
+      else print("No sessions to load") end
+    end,
+  },
 }
 
 --[[ #plugins install ]]--
@@ -204,11 +217,11 @@ require("lazy").setup({
   { "L3MON4D3/LuaSnip" },
   -- misc & themes
   { "goolord/alpha-nvim" },
-  { "folke/tokyonight.nvim",    name = "tokyonight" },
-  { "akinsho/horizon.nvim",     name = "horizon" },
-  { "sainnhe/gruvbox-material", name = "gruvbox" },
-  { "rose-pine/neovim",         name = "rose-pine" },
-  { "AlexvZyl/nordic.nvim",     name = "nordic" }
+  { "folke/tokyonight.nvim" },
+  { "akinsho/horizon.nvim" },
+  { "rose-pine/neovim" },
+  { "AlexvZyl/nordic.nvim" },
+  { "Koalhack/koalight.nvim" },
 }, {})
 
 --[[ #plugins config ]]--
@@ -218,27 +231,28 @@ do
       wrap_results          = false,
       path_display          = { "smart" },
       file_ignore_patterns  = { "node_modules/.*", "build/.*", "dist/.*" },
-      layout_config           = { prompt_position = "top" },
-      selection_caret = "> ",
-      sorting_strategy = 'ascending',
+      layout_config         = { prompt_position = "top" },
+      sorting_strategy      = 'ascending',
+      selection_caret       = "> ",
     },
     pickers = {
       find_files            = { layout_strategy = "horizontal" },
       live_grep             = { layout_strategy = "horizontal" },
       git_status            = { layout_strategy = "horizontal" },
       buffers               = { layout_strategy = "horizontal", theme = "dropdown" },
-      diagnostics           = { layout_strategy = "vertical", theme = "ivy" },
+      diagnostics           = { layout_strategy = "vertical", theme = "ivy", wrap_results = true, path_display = { "hidden" } },
       lsp_document_symbols  = { layout_strategy = "vertical", theme = "ivy" },
       lsp_references        = { theme = "cursor", jump_type = "never", path_display = { "tail" } },
       lsp_definitions       = { theme = "cursor", jump_type = "never", path_display = { "tail" } },
+      colorscheme           = { enable_preview = true },
     },
   }
   require"lualine".setup {
     options = {
       component_separators = { left = '╲', right = '╱'},
-      section_separators = { left = '', right = ''},
+      section_separators   = { left = '', right = ''},
       --component_separators = { left = '╲╲', right = '╲╲'},
-      --section_separators = { left = " ", right = " "},
+      --section_separators   = { left = " ", right = " "},
     },
     sections = {
       lualine_a = { "mode", "branch" },
@@ -258,23 +272,12 @@ do
   require"oil".setup {
     columns = {
       { "mtime", highlight = "Comment" },
-      { "size", highlight = "Label" },
-      { "icon", highlight = "Normal" },
+      { "size",  highlight = "Label" },
+      { "icon",  highlight = "Normal" },
     },
     default_file_explorer = false,
-    win_options = {
-      number = false,
-      relativenumber = false,
-      signcolumn = "no",
-      conceallevel = 3,
-      concealcursor = "nvic",
-    },
-    float = {
-      border = "rounded",
-      padding = 2,
-      max_width = 120,
-      max_height = 40,
-    },
+    win_options = { number = false, relativenumber = false, conceallevel = 3, concealcursor = "nvic" },
+    float = { border = "rounded", padding = 2, max_width = 120, max_height = 40 },
   }
   require"mason".setup {}
   require"mason-lspconfig".setup {}
@@ -288,13 +291,9 @@ do
     sources = { { name = "nvim_lsp" }, { name = "buffer" }, { name = "luasnip" } },
     snippet = { expand = function(args) require"luasnip".lsp_expand(args.body) end },
     formatting = { format = function(_, i) local kind = i.kind i.kind = (icons.autocomplete[kind] or "?") i.menu = "" .. kind return i end },
-    window = {
-      completion = cmp.config.window.bordered(),
-      documentation = cmp.config.window.bordered(),
-    },
+    window = { completion = cmp.config.window.bordered(), documentation = cmp.config.window.bordered() },
     mapping = {
       ["<Tab>"] = cmp.mapping.select_next_item(),
-      --["K"] = cmp.mapping.open_docs(),
       ["<S-Tab>"] = cmp.mapping.select_prev_item(),
       ["<C-c>"] = cmp.mapping.abort(),
       ["<CR>"] = cmp.mapping.confirm({ select = false }),
@@ -313,6 +312,22 @@ vim.cmd[[set path+=**]]
 vim.cmd[[autocmd VimResized * :wincmd =]]
 vim.cmd[[autocmd WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "netrw"|q|endif]]
 vim.cmd[[set wildmenu]]
+
+--[[ #sessions ]]--
+function SessionSave()
+  local dir = vim.fn.stdpath("config") .. "/.sessions"
+  local filename = dir .. "/" .. vim.fn.getcwd():gsub("/", "_") .. ".vim"
+  if vim.fn.isdirectory(dir) == 0 then vim.fn.mkdir(dir, "p"); vim.cmd("redraw!") end
+  vim.cmd("mksession! " .. filename)
+end
+function SessionLoad()
+  local dir = vim.fn.stdpath("config") .. "/.sessions"
+  local filename = dir .. "/" .. vim.fn.getcwd():gsub("/", "_") .. ".vim"
+  if vim.fn.filereadable(filename) == 1 then vim.cmd("source " .. filename)
+  else vim.notify("No sessions to load") end
+end
+vim.cmd("autocmd VimEnter * nested lua SessionLoad()")
+vim.cmd("autocmd VimLeave * lua SessionSave()")
 
 --[[ #colorscheme ]]--
 function Colorscheme(colorscheme)
