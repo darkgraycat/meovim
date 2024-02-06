@@ -249,18 +249,18 @@ do
   }
   require"lualine".setup {
     options = {
-      component_separators = { left = '╲', right = '╱'},
-      section_separators   = { left = '', right = ''},
-      --component_separators = { left = '╲╲', right = '╲╲'},
-      --section_separators   = { left = " ", right = " "},
+      --component_separators = { left = '╲', right = '╱'},
+      --section_separators   = { left = '', right = ''},
+      component_separators = { left = '╲╲', right = '╲╲'},
+      section_separators   = { left = " ", right = " "},
     },
     sections = {
-      lualine_a = { "mode" },
+      lualine_a = { "mode", "location" },
       lualine_b = { "diagnostics", "diff" },
       lualine_c = { { "filename", path = 1 } },
       lualine_x = { "encoding" },
-      lualine_y = { "selectioncount", "filetype" },
-      lualine_z = { "location", "progress" },
+      lualine_y = { "filetype" },
+      lualine_z = { "selectioncount", "progress" },
     },
     tabline = {
       lualine_a = { { "buffers", max_length = vim.o.columns } },
