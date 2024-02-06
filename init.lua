@@ -302,9 +302,10 @@ do
   }
   local alpha_th = require"alpha.themes.theta"
   local alpha_db = require"alpha.themes.dashboard"
+  local alpha_time = tostring(os.date("%A %I:%M %p"))
   alpha_th.header.val = meovim
   alpha_th.buttons.val = {
-    { type = "text", val = "╭"..string.rep("─", 48).."╮", opts = { hl = "TelescopeBorder", position = "center" } },
+    { type = "text", val = "╭"..string.rep("─", 48 - string.len(alpha_time))..alpha_time.."╮", opts = { hl = "TelescopeBorder", position = "center" } },
     alpha_db.button("e", "󰝒   New file",        ":ene <BAR> startinsert <CR>"),
     alpha_db.button("f", "󰱼   Find file",       ":Telescope find_files <CR>"),
     alpha_db.button("g", "󱎸   Find text",       ":Telescope live_grep <CR>"),
