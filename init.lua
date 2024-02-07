@@ -60,11 +60,13 @@ local keymaps = {
   { "n", "<A-]>", ":tabnext<CR>"},
   { "n", "d=", ":tabclose<CR>"},
   -- gui control
-  { { "n", "v" }, "<C-/>", ":Lex<CR>" },
+  { { "n", "v" }, "<C-/>", [[<cmd>Lex!<CR>]] },
   { { "n", "t" }, "<C-\\>", [[<cmd>lua require('FTerm').toggle()<CR>]] },
   { "t", "<C-c><C-c>", [[<cmd>lua require('FTerm').close()<CR>]] },
   { "n", "<C-o>", [[<cmd>lua require('oil').toggle_float()<CR>]]},
-  { "n", "<C-w>a", ":Alpha<CR>" },
+  { { "n", "t" }, "<C-|>", [[<cmd>vsplit term://zsh<CR>i]] },
+  { "t", "<Esc>", [[<C-\><C-n>]] },
+  { "n", "<C-w>a", [[<cmd>Alpha<CR>]] },
   -- telescope
   { "n", "<C-p>",      ":Telescope find_files theme=dropdown layout_config={mirror=true}<CR>", "Find files" },
   { "n", "<C-g>",      ":Telescope git_", "Git commands" },
@@ -265,7 +267,7 @@ do
       lualine_z = { "selectioncount", "progress" },
     },
     tabline = {
-      lualine_a = { { "buffers", max_length = vim.o.columns } },
+      lualine_a = { { "buffers", max_length = vim.o.columns * 0.8 } },
       lualine_x = { "branch" },
       lualine_z = { "tabs" },
     },
@@ -282,13 +284,13 @@ do
     win_options = { number = false, relativenumber = false, conceallevel = 3, concealcursor = "nvic" },
     float = { border = "rounded", padding = 2, max_width = 120, max_height = 40 },
   }
+  local language_servers = { "lua_ls", "tsserver", "rust_analyzer", "intelephense" }
   require"mason".setup {}
-  require"mason-lspconfig".setup {}
+  require"mason-lspconfig".setup { ensure_installed = language_servers }
   local lspconfig = require"lspconfig"
   local cmp = require"cmp"
   local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
-  local lsps = { "lua_ls", "tsserver", "rust_analyzer", "intelephense" }
-  for _, lsp in ipairs(lsps) do lspconfig[lsp].setup({ capabilities = capabilities }) end
+  for _, lsp in ipairs(language_servers) do lspconfig[lsp].setup({ capabilities = capabilities }) end
   vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
   cmp.setup {
     sources = { { name = "nvim_lsp" }, { name = "buffer" }, { name = "luasnip" } },
