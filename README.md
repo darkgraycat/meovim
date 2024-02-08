@@ -3,7 +3,7 @@
 
 #### Target
 1. As small as possible config file `< 400~ lines`
-2. Painless work without plugins
+2. Painless work even without plugins
 3. Ease to customize
 4. Structured and readable config
 
@@ -17,6 +17,7 @@
 
 #### Plugins used
 Total `20` plugins used, including `5` colorchemes
+
 List of plugins:
 ```lua
   -- ui
@@ -32,9 +33,9 @@ List of plugins:
   { "L3MON4D3/LuaSnip" },
   -- misc & themes
   { "goolord/alpha-nvim" },
-  { "folke/tokyonight.nvim" },
-  { "akinsho/horizon.nvim" },
-  { "rose-pine/neovim" },
-  { "AlexvZyl/nordic.nvim" },
-  { "Koalhack/koalight.nvim" },
+  { "folke/tokyonight.nvim", name = "tokyonight" },
+  { "akinsho/horizon.nvim", name = "horizon" },
+  { "rose-pine/neovim", name = "rosepine" },
+  { "AlexvZyl/nordic.nvim", name = "nordic" },
+  { "catppuccin/nvim", name = "catppuccin" },
 ```

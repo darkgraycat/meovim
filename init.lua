@@ -16,7 +16,7 @@ local meovim = {
   [[                    ░▒▓▓▒▒▓█▓░                    ]],
   [[                    ░▒▒░░▒▒░▒░                    ]],
 }
-local colors = "horizon"
+local colors = "nordic"
 
 --[[ #keymaps ]]--
 local keymaps = {
