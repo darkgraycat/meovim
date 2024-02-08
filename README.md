@@ -17,15 +17,15 @@
 
 #### Config structure
 Config has special structure to allow making fast changes
-- meovim dashboard art
-- colorscheme
-- keymaps
-- globals and options
-- used icons
-- highlights customization
-- local helper functions and global aliases
-- plugins
-- apply configuration and setup autocmd's
+1 meovim dashboard art
+2 colorscheme
+3 keymaps
+4 globals and options
+5 used icons
+6 highlights customization
+7 local helper functions and global aliases
+8 plugins
+9 apply configuration and setup autocmd's
 
 #### Plugins used
 Total `20` plugins used, including `5` colorchemes
