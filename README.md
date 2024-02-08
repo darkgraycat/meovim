@@ -1,12 +1,12 @@
 ## Meovim
 `Minimal Neovim configuration`
-
+----
 #### Target
 1. As small as possible config file `< 400~ lines`
 2. Painless work even without plugins
 3. Ease to customize
 4. Structured and readable config
-
+----
 #### Features
 * Usefull keymaps to allow fast typing and navigation
 * Pluginless minimalistic indent guides and brackets autopair
@@ -14,7 +14,7 @@
 * Consistent highlights to make all floats match one style
 * All commonly used opts in one place
 * Icons (patched font required)
-
+----
 #### Config structure
 Config has special structure to allow making fast changes:
 1. meovim dashboard art
@@ -26,11 +26,9 @@ Config has special structure to allow making fast changes:
 7. local helper functions and global aliases
 8. plugins
 9. apply configuration and setup autocmd's
-
+----
 #### Plugins used
-Total `20` plugins used, including `5` colorchemes
-
-List of plugins:
+Total `20` plugins used, including `5` colorchemes:
 ```lua
   -- ui
   { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
@@ -51,7 +49,7 @@ List of plugins:
   { "AlexvZyl/nordic.nvim", name = "nordic" },
   { "catppuccin/nvim", name = "catppuccin" },
 ```
-
+----
 #### Useful keymaps
 Brackets autopairs
 For [] {} () '' "" `` /**/ works:
