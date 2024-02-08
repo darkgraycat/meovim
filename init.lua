@@ -156,12 +156,7 @@ local icons = {
     Color = "󰏘 ", File = "󰈙 ", Reference = "", Folder = "󰉋", EnumMember = " ",
     Constant = "󰏿 ", Struct = " ", Event = " ", Operator = "󰆕 ", TypeParameter = " ",
   },
-  diagnostics = {
-    DiagnosticSignError = "",
-    DiagnosticSignWarn = "",
-    DiagnosticSignInfo = "",
-    DiagnosticSignHint = "󰌵 ",
-  }
+  diagnostics = { DiagnosticSignError = "", DiagnosticSignWarn = "", DiagnosticSignInfo = "", DiagnosticSignHint = "󰌵 " }
 }
 
 --[[ #highlights ]]--
