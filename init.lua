@@ -26,18 +26,15 @@ local keymaps = {
   { { "n", "v" }, "<C-u>", "<C-u>zz" },
   { { "n", "v" }, "<C-j>", "5j" },
   { { "n", "v" }, "<C-k>", "5k" },
-  { { "n", "v" }, "<C-h>", "^" },
-  { { "n", "v" }, "<C-l>", "$" },
+  { { "n", "v" }, "<C-h>", "5b" },
+  { { "n", "v" }, "<C-l>", "5w" },
   -- buffer helpers
   { "i", "{", "{}<left>" }, { "i", "{}", "{}" }, { "i", "{<CR>", "{<CR>}<Esc>O" }, { "i", "{ ", "{  }<left><left>" }, { "v", "{}", "<Esc>`>a }<Esc>`<i{ <Esc>gv" },
   { "i", "[", "[]<left>" }, { "i", "[]", "[]" }, { "i", "[<CR>", "[<CR>]<Esc>O" }, { "i", "[ ", "[  ]<left><left>" }, { "v", "[]", "<Esc>`>a ]<Esc>`<i[ <Esc>gv" },
   { "i", "(", "()<left>" }, { "i", "()", "()" }, { "i", "(<CR>", "(<CR>)<Esc>O" }, { "i", "( ", "(  )<left><left>" }, { "v", "()", "<Esc>`>a )<Esc>`<i( <Esc>gv" },
-  { "i", "`", "``<left>" }, { "i", "``", "``" },
-  { "i", "'", "''<left>" }, { "i", "''", "''" },
-  { "i", '"', '""<left>' }, { "i", '""', '""' },
-  { "v", "``", "<Esc>`>a`<Esc>`<i`<Esc>gv" },
-  { "v", "''", "<Esc>`>a'<Esc>`<i'<Esc>gv" },
-  { "v", '""', '<Esc>`>a"<Esc>`<i"<Esc>gv' },
+  { "i", "`", "``<left>" }, { "i", "``", "``" }, { "v", "``", "<Esc>`>a`<Esc>`<i`<Esc>gv" },
+  { "i", "'", "''<left>" }, { "i", "''", "''" }, { "v", "''", "<Esc>`>a'<Esc>`<i'<Esc>gv" },
+  { "i", '"', '""<left>' }, { "i", '""', '""' }, { "v", '""', '<Esc>`>a"<Esc>`<i"<Esc>gv' },
   { "i", "/*", "/**/<left><left>" }, { "v", "/*", "<Esc>`>a*/<Esc>`<i/*" },
   { "i", ";;", "<Esc>A;<CR>"}, { "i", "<C-,>", "<Esc>bi"}, { "i", "<C-.>", "<Esc>ea" },
   { "v", "<leader>y", [["+y]] },
@@ -48,20 +45,13 @@ local keymaps = {
   -- lsp helpers
   { { "n" }, "K", vim.lsp.buf.hover },
   { { "n", "v" }, "<leader>ca", vim.lsp.buf.code_action },
-  -- window control
-  { "n", "<A-Left>",  ":vertical resize +4<CR>"},
-  { "n", "<A-Right>", ":vertical resize -4<CR>"},
-  { "n", "<A-Down>",  ":horizontal resize +4<CR>"},
-  { "n", "<A-Up>",    ":horizontal resize -4<CR>"},
-  -- tabline control
-  { "n", "§",     ":bnext <CR>"},
-  { "n", "±",     ":bprevious <CR>"},
+  -- window/buffers/tabs control
+  { "n", "§",     ":bnext <CR>"},  { "n", "±",     ":bprevious <CR>"},
   { "n", "d§",    ":<C-U>bprevious <bar> bdelete #<CR>" },
-  -- tabs control
-  { "n", "<A-=>", ":tabnew<CR>"},
-  { "n", "<A-[>", ":tabprevious<CR>"},
-  { "n", "<A-]>", ":tabnext<CR>"},
-  { "n", "d=",    ":tabclose<CR>"},
+  { "n", "<A-=>", ":tabnew<CR>"},  { "n", "d=",    ":tabclose<CR>"},
+  { "n", "<A-]>", ":tabnext<CR>"}, { "n", "<A-[>", ":tabprevious<CR>"},
+  { "n", "<A-Left>",  ":vertical resize +4<CR>"},   { "n", "<A-Right>", ":vertical resize -4<CR>"},
+  { "n", "<A-Down>",  ":horizontal resize +4<CR>"}, { "n", "<A-Up>",    ":horizontal resize -4<CR>"},
   -- gui control
   { "n", "<C-w>a", [[<cmd>Alpha<CR>]] },
   { "n", "<C-/>", [[<cmd>Lex!<CR>]] },
@@ -200,7 +190,7 @@ local helpers = {
   end,
 }
 
---[[ #handlers ]]--
+--[[ #aliases ]]--
 function SessionLoad() helpers.session_load() end
 function SessionSave() helpers.session_save() end
 function Colorscheme(scheme) helpers.apply_colorscheme(scheme, highlights) end
