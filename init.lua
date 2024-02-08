@@ -16,13 +16,12 @@ local meovim = {
   [[                    ░▒▓▓▒▒▓█▓░                    ]],
   [[                    ░▒▒░░▒▒░▒░                    ]],
 }
-local colors = "nordic"
+local colors = "horizon"
 
 --[[ #keymaps ]]--
 local keymaps = {
   -- buffer control
   { { "i", "c" }, "jk", "<Esc>" },
-  { "x", "<C-c>", "<Esc>" },
   { { "n", "v" }, "<C-d>", "<C-d>zz" },
   { { "n", "v" }, "<C-u>", "<C-u>zz" },
   { { "n", "v" }, "<C-j>", "5j" },
@@ -30,18 +29,22 @@ local keymaps = {
   { { "n", "v" }, "<C-h>", "^" },
   { { "n", "v" }, "<C-l>", "$" },
   -- buffer helpers
-  { "i", "{", "{}<left>" }, { "i", "{}", "{}" }, { "i", "{<CR>", "{<CR>}<Esc>O" }, { "v", "{}", "<Esc>`>a}<Esc>`<i{<Esc>gv" },
-  { "i", "[", "[]<left>" }, { "i", "[]", "[]" }, { "i", "[<CR>", "[<CR>]<Esc>O" }, { "v", "[]", "<Esc>`>a]<Esc>`<i[<Esc>gv" },
-  { "i", "(", "()<left>" }, { "i", "()", "()" }, { "i", "(<CR>", "(<CR>)<Esc>O" }, { "v", "()", "<Esc>`>a)<Esc>`<i(<Esc>gv" },
-  { "i", "`", "``<left>" }, { "i", "``", "``" }, { "i", "`<CR>", "`<CR>`<Esc>O" }, { "v", "``", "<Esc>`>a`<Esc>`<i`<Esc>gv" },
-  { "i", "'", "''<left>" }, { "i", "''", "''" }, { "v", "''", "<Esc>`>a'<Esc>`<i'<Esc>gv" },
-  { "i", '"', '""<left>' }, { "i", '""', '""' }, { "v", '""', '<Esc>`>a"<Esc>`<i"<Esc>gv' },
+  { "i", "{", "{}<left>" }, { "i", "{}", "{}" }, { "i", "{<CR>", "{<CR>}<Esc>O" }, { "i", "{ ", "{  }<left><left>" }, { "v", "{}", "<Esc>`>a }<Esc>`<i{ <Esc>gv" },
+  { "i", "[", "[]<left>" }, { "i", "[]", "[]" }, { "i", "[<CR>", "[<CR>]<Esc>O" }, { "i", "[ ", "[  ]<left><left>" }, { "v", "[]", "<Esc>`>a ]<Esc>`<i[ <Esc>gv" },
+  { "i", "(", "()<left>" }, { "i", "()", "()" }, { "i", "(<CR>", "(<CR>)<Esc>O" }, { "i", "( ", "(  )<left><left>" }, { "v", "()", "<Esc>`>a )<Esc>`<i( <Esc>gv" },
+  { "i", "`", "``<left>" }, { "i", "``", "``" },
+  { "i", "'", "''<left>" }, { "i", "''", "''" },
+  { "i", '"', '""<left>' }, { "i", '""', '""' },
+  { "v", "``", "<Esc>`>a`<Esc>`<i`<Esc>gv" },
+  { "v", "''", "<Esc>`>a'<Esc>`<i'<Esc>gv" },
+  { "v", '""', '<Esc>`>a"<Esc>`<i"<Esc>gv' },
   { "i", "/*", "/**/<left><left>" }, { "v", "/*", "<Esc>`>a*/<Esc>`<i/*" },
   { "i", ";;", "<Esc>A;<CR>"}, { "i", "<C-,>", "<Esc>bi"}, { "i", "<C-.>", "<Esc>ea" },
   { "v", "<leader>y", [["+y]] },
   { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
-  { "v", "J", ":m '>+1<CR>gv=gv" },
-  { "v", "K", ":m '<-2<CR>gv=gv" },
+  { "v", "J", ":m '>+1<CR>gv=gv" }, { "v", "K", ":m '<-2<CR>gv=gv" },
+  { "v", "<C-;>/", [[:s/^/\/\//<CR>]] },
+  { "v", "<C-;>-", [[:s/^/--/<CR>]] },
   -- lsp helpers
   { { "n" }, "K", vim.lsp.buf.hover },
   { { "n", "v" }, "<leader>ca", vim.lsp.buf.code_action },
@@ -51,22 +54,22 @@ local keymaps = {
   { "n", "<A-Down>",  ":horizontal resize +4<CR>"},
   { "n", "<A-Up>",    ":horizontal resize -4<CR>"},
   -- tabline control
-  { "n", "§",   ":bnext <CR>"},
-  { "n", "±", ":bprevious <CR>"},
-  { "n", "d§", ":<C-U>bprevious <bar> bdelete #<CR>" },
+  { "n", "§",     ":bnext <CR>"},
+  { "n", "±",     ":bprevious <CR>"},
+  { "n", "d§",    ":<C-U>bprevious <bar> bdelete #<CR>" },
   -- tabs control
   { "n", "<A-=>", ":tabnew<CR>"},
   { "n", "<A-[>", ":tabprevious<CR>"},
   { "n", "<A-]>", ":tabnext<CR>"},
-  { "n", "d=", ":tabclose<CR>"},
+  { "n", "d=",    ":tabclose<CR>"},
   -- gui control
-  { { "n", "v" }, "<C-/>", [[<cmd>Lex!<CR>]] },
-  { { "n", "t" }, "<C-\\>", [[<cmd>lua require('FTerm').toggle()<CR>]] },
-  { "t", "<C-c><C-c>", [[<cmd>lua require('FTerm').close()<CR>]] },
+  { "n", "<C-w>a", [[<cmd>Alpha<CR>]] },
+  { "n", "<C-/>", [[<cmd>Lex!<CR>]] },
   { "n", "<C-o>", [[<cmd>lua require('oil').toggle_float()<CR>]]},
   { { "n", "t" }, "<C-|>", [[<cmd>vsplit term://zsh<CR>i]] },
+  { { "n", "t" }, "<C-\\>", [[<cmd>lua require('FTerm').toggle()<CR>]] },
   { "t", "<Esc>", [[<C-\><C-n>]] },
-  { "n", "<C-w>a", [[<cmd>Alpha<CR>]] },
+  { "t", "<C-c><C-c>", [[<C-c>exit<CR>]] },
   -- telescope
   { "n", "<C-p>",      ":Telescope find_files theme=dropdown layout_config={mirror=true}<CR>", "Find files" },
   { "n", "<C-g>",      ":Telescope git_", "Git commands" },
@@ -161,6 +164,16 @@ local icons = {
   }
 }
 
+--[[ #highlights ]]--
+local highlights = {
+  FloatTitle = "Title",
+  NormalFloat = "Normal",
+  FloatBorder = "Function",
+  TelescopeTitle = "FloatTitle",   TelescopeResultsTitle  = "TelescopeTitle",  TelescopePreviewTitle  = "TelescopeTitle",  TelescopePromptTitle  = "TelescopeTitle",
+  TelescopeNormal = "NormalFloat", TelescopeResultsNormal = "TelescopeNormal", TelescopePreviewNormal = "TelescopeNormal", TelescopePromptNormal = "TelescopeNormal",
+  TelescopeBorder = "FloatBorder", TelescopeResultsBorder = "TelescopeBorder", TelescopePreviewBorder = "TelescopeBorder", TelescopePromptBorder = "TelescopeBorder",
+}
+
 --[[ #helpers ]]--
 local helpers = {
   apply_settings = function (globals, options)
@@ -170,26 +183,32 @@ local helpers = {
   apply_keymaps = function (keymaps)
     for _, m in pairs(keymaps) do vim.keymap.set(m[1], m[2], m[3], { noremap = true, silent = false, desc = m[4] } ) end
   end,
-  apply_highlights = function (highlights)
-    for hi, link in pairs(highlights) do vim.cmd("hi clear " .. hi) vim.cmd("hi link " .. hi .. " " ..link) end
-  end,
   apply_icons = function (icons)
     for hl, icon in pairs(icons) do vim.fn.sign_define(hl, { text = icon, texthl = hl }) end
   end,
-  session = {
-    sessions_dir = vim.fn.stdpath("config") .. "/.sessions",
-    filename = function () return helpers.session.sessions_dir .. "/" .. vim.fn.getcwd():gsub("/", "_") .. ".vim" end,
-    save = function () 
-      local filename = helpers.session.filename()
-      vim.cmd("mksession! " .. filename)
-    end,
-    load = function () 
-      local filename = helpers.session.filename()
-      if vim.fn.filereadable(filename) == 1 then vim.cmd("source " .. filename)
-      else print("No sessions to load") end
-    end,
-  },
+  apply_colorscheme = function (colorscheme, highlights)
+    vim.cmd("colorscheme " .. colorscheme)
+    if highlights == nil then return end
+    for hi, link in pairs(highlights) do vim.cmd("hi clear " .. hi) vim.cmd("hi link " .. hi .. " " ..link) end
+  end,
+  session_load = function ()
+    local dir = vim.fn.stdpath("config") .. "/.sessions"
+    local filename = dir .. "/" .. vim.fn.getcwd():gsub("/", "_") .. ".vim"
+    if vim.fn.filereadable(filename) == 1 then vim.cmd("source " .. filename)
+    else vim.notify("No sessions to load") end
+  end,
+  session_save = function ()
+    local dir = vim.fn.stdpath("config") .. "/.sessions"
+    local filename = dir .. "/" .. vim.fn.getcwd():gsub("/", "_") .. ".vim"
+    if vim.fn.isdirectory(dir) == 0 then vim.fn.mkdir(dir, "p"); vim.cmd("redraw!") end
+    vim.cmd("mksession! " .. filename)
+  end,
 }
+
+--[[ #handlers ]]--
+function SessionLoad() helpers.session_load() end
+function SessionSave() helpers.session_save() end
+function Colorscheme(scheme) helpers.apply_colorscheme(scheme, highlights) end
 
 --[[ #plugins install ]]--
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -219,11 +238,11 @@ require("lazy").setup({
   { "L3MON4D3/LuaSnip" },
   -- misc & themes
   { "goolord/alpha-nvim" },
-  { "folke/tokyonight.nvim" },
-  { "akinsho/horizon.nvim" },
-  { "rose-pine/neovim" },
-  { "AlexvZyl/nordic.nvim" },
-  { "Koalhack/koalight.nvim" },
+  { "folke/tokyonight.nvim", name = "tokyonight" },
+  { "akinsho/horizon.nvim", name = "horizon" },
+  { "rose-pine/neovim", name = "rosepine" },
+  { "AlexvZyl/nordic.nvim", name = "nordic" },
+  { "catppuccin/nvim", name = "catppuccin" },
 }, {})
 
 --[[ #plugins config ]]--
@@ -325,36 +344,9 @@ end
 helpers.apply_settings(globals, options)
 helpers.apply_keymaps(keymaps)
 helpers.apply_icons(icons.diagnostics)
+helpers.apply_colorscheme(colors, highlights)
 vim.cmd[[set path+=**]]
+vim.cmd[[set wildmenu]]
 vim.cmd[[autocmd VimResized * :wincmd =]]
 vim.cmd[[autocmd WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "netrw"|q|endif]]
-vim.cmd[[set wildmenu]]
-
---[[ #sessions ]]--
-function SessionSave()
-  local dir = vim.fn.stdpath("config") .. "/.sessions"
-  local filename = dir .. "/" .. vim.fn.getcwd():gsub("/", "_") .. ".vim"
-  if vim.fn.isdirectory(dir) == 0 then vim.fn.mkdir(dir, "p"); vim.cmd("redraw!") end
-  vim.cmd("mksession! " .. filename)
-end
-function SessionLoad()
-  local dir = vim.fn.stdpath("config") .. "/.sessions"
-  local filename = dir .. "/" .. vim.fn.getcwd():gsub("/", "_") .. ".vim"
-  if vim.fn.filereadable(filename) == 1 then vim.cmd("source " .. filename)
-  else vim.notify("No sessions to load") end
-end
-vim.cmd[[autocmd VimLeave *        lua if vim.fn.confirm("Save session?", "&Yes\n&No", 2) == 1 then SessionSave() end]]
-
---[[ #colorscheme ]]--
-function Colorscheme(colorscheme)
-  vim.cmd("colorscheme " .. colorscheme)
-  helpers.apply_highlights {
-    FloatTitle = "Title",
-    NormalFloat = "Normal",
-    FloatBorder = "Function",
-    TelescopeTitle = "FloatTitle",   TelescopeResultsTitle  = "TelescopeTitle",  TelescopePreviewTitle  = "TelescopeTitle",  TelescopePromptTitle  = "TelescopeTitle",
-    TelescopeNormal = "NormalFloat", TelescopeResultsNormal = "TelescopeNormal", TelescopePreviewNormal = "TelescopeNormal", TelescopePromptNormal = "TelescopeNormal",
-    TelescopeBorder = "FloatBorder", TelescopeResultsBorder = "TelescopeBorder", TelescopePreviewBorder = "TelescopeBorder", TelescopePromptBorder = "TelescopeBorder",
-  }
-end
-Colorscheme(colors)
+vim.cmd[[autocmd VimLeave * lua if vim.fn.confirm("Save session?", "&Yes\n&No", 2) == 1 then SessionSave() end]]
