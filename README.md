@@ -52,12 +52,14 @@ Total `20` plugins used, including `5` colorchemes:
 ----
 #### Useful keymaps
 Brackets autopairs
-```For [] {} () '' "" `` /**/ works:
+```
+For [] {} () '' "" `` /**/ works:
     surround words in Visual mode
     auto pair in Insert mode
 For [] {} () additionaly works:
     auto open on Enter in Insert mode (usefull for functions)
-    auto open on Space in Insert mode (usefull for destructurization)```
+    auto open on Space in Insert mode (usefull for destructurization)
+```
 
 LSP stuff:
 <Tab> / <S-Tab> - cycle autocomplete suggestions
