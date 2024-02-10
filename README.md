@@ -96,8 +96,8 @@ For very lazy me:
 ```
 jk - exit Insert, Command mode
 <C-j>, <C-k> - scroll up/down 5 lines
-<C-h>, <C-l> - scroll left/right 5 words
+<C-h>, <C-l> - scroll left/right 2 words
 ;;  - add ; at the end in Insert mode
-. , - next/previos word in Insert mode
+>> << - next/previos word in Insert mode
 ```
 And more...

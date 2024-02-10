@@ -26,8 +26,8 @@ local keymaps = {
   { { "n", "v" }, "<C-u>", "<C-u>zz" },
   { { "n", "v" }, "<C-j>", "5j" },
   { { "n", "v" }, "<C-k>", "5k" },
-  { { "n", "v" }, "<C-h>", "5b" },
-  { { "n", "v" }, "<C-l>", "5w" },
+  { { "n", "v" }, "<C-h>", "2b" },
+  { { "n", "v" }, "<C-l>", "2w" },
   -- buffer helpers
   { "i", "{", "{}<left>" }, { "i", "{}", "{}" }, { "i", "{<CR>", "{<CR>}<Esc>O" }, { "i", "{ ", "{  }<left><left>" }, { "v", "{}", "<Esc>`>a }<Esc>`<i{ <Esc>gv" },
   { "i", "[", "[]<left>" }, { "i", "[]", "[]" }, { "i", "[<CR>", "[<CR>]<Esc>O" }, { "i", "[ ", "[  ]<left><left>" }, { "v", "[]", "<Esc>`>a ]<Esc>`<i[ <Esc>gv" },
@@ -36,7 +36,7 @@ local keymaps = {
   { "i", "'", "''<left>" }, { "i", "''", "''" }, { "v", "''", "<Esc>`>a'<Esc>`<i'<Esc>gv" },
   { "i", '"', '""<left>' }, { "i", '""', '""' }, { "v", '""', '<Esc>`>a"<Esc>`<i"<Esc>gv' },
   { "i", "/*", "/**/<left><left>" }, { "v", "/*", "<Esc>`>a*/<Esc>`<i/*" },
-  { "i", ";;", "<Esc>A;<CR>"}, { "i", "<C-,>", "<Esc>bi"}, { "i", "<C-.>", "<Esc>ea" },
+  { "i", ";;", "<Esc>A;<CR>"}, { "i", "<<", "<Esc>bi"}, { "i", ">>", "<Esc>ea" },
   { "v", "<leader>y", [["+y]] },
   { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
   { "v", "J", ":m '>+1<CR>gv=gv" }, { "v", "K", ":m '<-2<CR>gv=gv" },
@@ -54,7 +54,7 @@ local keymaps = {
   { "n", "<A-Down>",  ":horizontal resize +4<CR>"}, { "n", "<A-Up>",    ":horizontal resize -4<CR>"},
   -- gui control
   { "n", "<C-w>a", [[<cmd>Alpha<CR>]] },
-  { "n", "<C-/>", [[<cmd>Lex!<CR>]] },
+  { "n", "<C-/>", [[<cmd>Lex<CR>]] },
   { "n", "<C-o>", [[<cmd>lua require('oil').toggle_float()<CR>]]},
   { { "n", "t" }, "<C-|>", [[<cmd>vsplit term://zsh<CR>i]] },
   { { "n", "t" }, "<C-\\>", [[<cmd>lua require('FTerm').toggle()<CR>]] },
@@ -151,8 +151,9 @@ local icons = {
 
 --[[ #highlights ]]--
 local highlights = {
-  FloatTitle = "Title",
+  NormalNC = "Normal",
   NormalFloat = "Normal",
+  FloatTitle = "Title",
   FloatBorder = "Function",
   TelescopeTitle = "FloatTitle",   TelescopeResultsTitle  = "TelescopeTitle",  TelescopePreviewTitle  = "TelescopeTitle",  TelescopePromptTitle  = "TelescopeTitle",
   TelescopeNormal = "NormalFloat", TelescopeResultsNormal = "TelescopeNormal", TelescopePreviewNormal = "TelescopeNormal", TelescopePromptNormal = "TelescopeNormal",
@@ -176,6 +177,9 @@ local helpers = {
     if highlights == nil then return end
     for hi, link in pairs(highlights) do vim.cmd("hi clear " .. hi) vim.cmd("hi link " .. hi .. " " ..link) end
   end,
+  toggle_transparency = function ()
+    vim.cmd[[hi Normal guibg=NONE ctermbg=NONE]]
+  end,
   session_load = function ()
     local dir = vim.fn.stdpath("config") .. "/.sessions"
     local filename = dir .. "/" .. vim.fn.getcwd():gsub("/", "_") .. ".vim"
@@ -193,6 +197,7 @@ local helpers = {
 --[[ #aliases ]]--
 function SessionLoad() helpers.session_load() end
 function SessionSave() helpers.session_save() end
+function MarksShow() helpers.marks_show() end
 function Colorscheme(scheme) helpers.apply_colorscheme(scheme, highlights) end
 
 --[[ #plugins install ]]--
@@ -255,10 +260,10 @@ do
   }
   require"lualine".setup {
     options = {
-      --component_separators = { left = '╲', right = '╱'},
-      --section_separators   = { left = '', right = ''},
-      component_separators = { left = '╲╲', right = '╲╲'},
-      section_separators   = { left = "", right = ""},
+      component_separators = { left = '╲', right = '╱'},
+      section_separators   = { left = '', right = ''},
+      --component_separators = { left = '╲╲', right = '╲╲'},
+      --section_separators   = { left = "", right = ""},
       --component_separators = { left = "░", right = "░" },
       --section_separators   = { left = "▓▒░", right = "░▒▓" },
     },
@@ -288,7 +293,7 @@ do
     win_options = { number = false, relativenumber = false, conceallevel = 3, concealcursor = "nvic" },
     float = { border = "rounded", padding = 2, max_width = 120, max_height = 40 },
   }
-  local language_servers = { "lua_ls", "tsserver", "rust_analyzer", "intelephense" }
+  local language_servers = { "lua_ls", "clangd", "tsserver", "rust_analyzer", "intelephense" }
   require"mason".setup {}
   require"mason-lspconfig".setup { ensure_installed = language_servers }
   local lspconfig = require"lspconfig"
