@@ -148,7 +148,8 @@ local icons = {
     Color = "󰏘 ", File = "󰈙 ", Reference = "", Folder = "󰉋", EnumMember = " ",
     Constant = "󰏿 ", Struct = " ", Event = " ", Operator = "󰆕 ", TypeParameter = " ",
   },
-  diagnostics = { DiagnosticSignError = "", DiagnosticSignWarn = "", DiagnosticSignInfo = "", DiagnosticSignHint = "󰌵 " }
+  diagnostics = { DiagnosticSignError = "", DiagnosticSignWarn = "", DiagnosticSignInfo = "", DiagnosticSignHint = "󰌵 " },
+  dashboard = { NewFile = "󰝒", FindFile = "󰱼", FindText = "󱎸", RestoreSession = "󰁯", Settings = "", Quit = "󰄛" }
 }
 
 --[[ #highlights ]]--
@@ -176,9 +177,6 @@ local helpers = {
   end,
   apply_highlights = function (highlights)
     for hi, link in pairs(highlights) do vim.cmd("hi clear " .. hi) vim.cmd("hi link " .. hi .. " " ..link) end
-  end,
-  toggle_transparency = function ()
-    vim.cmd[[hi Normal guibg=NONE ctermbg=NONE]]
   end,
   session_load = function ()
     local dir = vim.fn.stdpath("config") .. "/.sessions"
@@ -318,12 +316,12 @@ do
   alpha_th.header.val = meovim
   alpha_th.buttons.val = {
     { type = "text", val = "╭"..string.rep("─", 48 - string.len(alpha_time))..alpha_time.."╮", opts = { hl = "TelescopeBorder", position = "center" } },
-    alpha_db.button("e", "󰝒   New file",        ":ene <BAR> startinsert <CR>"),
-    alpha_db.button("f", "󰱼   Find file",       ":Telescope find_files <CR>"),
-    alpha_db.button("g", "󱎸   Find text",       ":Telescope live_grep <CR>"),
-    alpha_db.button("r", "󰁯   Restore session", ":lua SessionLoad() <CR>"),
-    alpha_db.button("s", "   Settings",        ":e ~/.config/nvim/init.lua<CR>"),
-    alpha_db.button("q", "󰄛   Quit",            ":qa<CR>"),
+    alpha_db.button("e", icons.dashboard.NewFile        .. "  New file",        ":ene <BAR> startinsert <CR>"),
+    alpha_db.button("f", icons.dashboard.FindFile       .. "  Find file",       ":Telescope find_files <CR>"),
+    alpha_db.button("g", icons.dashboard.FindText       .. "  Find text",       ":Telescope live_grep <CR>"),
+    alpha_db.button("r", icons.dashboard.RestoreSession .. "  Restore session", ":lua SessionLoad() <CR>"),
+    alpha_db.button("s", icons.dashboard.Settings       .. "  Settings",        ":e ~/.config/nvim/init.lua<CR>"),
+    alpha_db.button("q", icons.dashboard.Quit           .. "  Quit",            ":qa<CR>"),
     { type = "text", val = "╰"..string.rep("─", 48).."╯", opts = { hl = "TelescopeBorder", position = "center" } },
   }
   require"alpha".setup(alpha_th.config)
