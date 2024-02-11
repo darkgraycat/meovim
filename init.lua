@@ -16,7 +16,7 @@ local meovim = {
   [[                    ░▒▓▓▒▒▓█▓░                    ]],
   [[                    ░▒▒░░▒▒░▒░                    ]],
 }
-local colors = "nordic"
+local colors = "horizon"
 
 --[[ #keymaps ]]--
 local keymaps = {
@@ -28,14 +28,16 @@ local keymaps = {
   { { "n", "v" }, "<C-k>", "5k" },
   { { "n", "v" }, "<C-h>", "2b" },
   { { "n", "v" }, "<C-l>", "2w" },
-  -- buffer helpers
+  -- autopair brackets
   { "i", "{", "{}<left>" }, { "i", "{}", "{}" }, { "i", "{<CR>", "{<CR>}<Esc>O" }, { "i", "{ ", "{  }<left><left>" }, { "v", "{}", "<Esc>`>a }<Esc>`<i{ <Esc>gv" },
   { "i", "[", "[]<left>" }, { "i", "[]", "[]" }, { "i", "[<CR>", "[<CR>]<Esc>O" }, { "i", "[ ", "[  ]<left><left>" }, { "v", "[]", "<Esc>`>a ]<Esc>`<i[ <Esc>gv" },
   { "i", "(", "()<left>" }, { "i", "()", "()" }, { "i", "(<CR>", "(<CR>)<Esc>O" }, { "i", "( ", "(  )<left><left>" }, { "v", "()", "<Esc>`>a )<Esc>`<i( <Esc>gv" },
+  -- autopair strings
   { "i", "`", "``<left>" }, { "i", "``", "``" }, { "v", "``", "<Esc>`>a`<Esc>`<i`<Esc>gv" },
   { "i", "'", "''<left>" }, { "i", "''", "''" }, { "v", "''", "<Esc>`>a'<Esc>`<i'<Esc>gv" },
   { "i", '"', '""<left>' }, { "i", '""', '""' }, { "v", '""', '<Esc>`>a"<Esc>`<i"<Esc>gv' },
   { "i", "/*", "/**/<left><left>" }, { "v", "/*", "<Esc>`>a*/<Esc>`<i/*" },
+  -- small helpers
   { "i", ";;", "<Esc>A;<CR>"}, { "i", "<<", "<Esc>bi"}, { "i", ">>", "<Esc>ea" },
   { "v", "<leader>y", [["+y]] },
   { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
@@ -172,9 +174,7 @@ local helpers = {
   apply_icons = function (icons)
     for hl, icon in pairs(icons) do vim.fn.sign_define(hl, { text = icon, texthl = hl }) end
   end,
-  apply_colorscheme = function (colorscheme, highlights)
-    vim.cmd("colorscheme " .. colorscheme)
-    if highlights == nil then return end
+  apply_highlights = function (highlights)
     for hi, link in pairs(highlights) do vim.cmd("hi clear " .. hi) vim.cmd("hi link " .. hi .. " " ..link) end
   end,
   toggle_transparency = function ()
@@ -197,8 +197,7 @@ local helpers = {
 --[[ #aliases ]]--
 function SessionLoad() helpers.session_load() end
 function SessionSave() helpers.session_save() end
-function MarksShow() helpers.marks_show() end
-function Colorscheme(scheme) helpers.apply_colorscheme(scheme, highlights) end
+function Highlights() helpers.apply_highlights(highlights) end
 
 --[[ #plugins install ]]--
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -334,9 +333,11 @@ end
 helpers.apply_settings(globals, options)
 helpers.apply_keymaps(keymaps)
 helpers.apply_icons(icons.diagnostics)
-helpers.apply_colorscheme(colors, highlights)
+helpers.apply_highlights(highlights)
 vim.cmd[[set path+=**]]
 vim.cmd[[set wildmenu]]
 vim.cmd[[autocmd VimResized * :wincmd =]]
 vim.cmd[[autocmd WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "netrw"|q|endif]]
 vim.cmd[[autocmd VimLeave * lua if vim.fn.confirm("Save session?", "&Yes\n&No", 2) == 1 then SessionSave() end]]
+vim.cmd[[autocmd ColorScheme * lua Highlights()]]
+vim.cmd("colorscheme " .. colors)
