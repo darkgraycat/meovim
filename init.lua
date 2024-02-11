@@ -16,18 +16,15 @@ local meovim = {
   [[                    ░▒▓▓▒▒▓█▓░                    ]],
   [[                    ░▒▒░░▒▒░▒░                    ]],
 }
-local colors = "horizon"
+local colors = "nordic"
 
 --[[ #keymaps ]]--
 local keymaps = {
   -- buffer control
   { { "i", "c" }, "jk", "<Esc>" },
-  { { "n", "v" }, "<C-d>", "<C-d>zz" },
-  { { "n", "v" }, "<C-u>", "<C-u>zz" },
-  { { "n", "v" }, "<C-j>", "5j" },
-  { { "n", "v" }, "<C-k>", "5k" },
-  { { "n", "v" }, "<C-h>", "2b" },
-  { { "n", "v" }, "<C-l>", "2w" },
+  { { "n", "v" }, "<C-d>", "<C-d>zz" }, { { "n", "v" }, "<C-u>", "<C-u>zz" },
+  { { "n", "v" }, "<C-j>", "5j" }, { { "n", "v" }, "<C-k>", "5k" },
+  { { "n", "v" }, "<C-h>", "2b" }, { { "n", "v" }, "<C-l>", "2w" },
   -- autopair brackets
   { "i", "{", "{}<left>" }, { "i", "{}", "{}" }, { "i", "{<CR>", "{<CR>}<Esc>O" }, { "i", "{ ", "{  }<left><left>" }, { "v", "{}", "<Esc>`>a }<Esc>`<i{ <Esc>gv" },
   { "i", "[", "[]<left>" }, { "i", "[]", "[]" }, { "i", "[<CR>", "[<CR>]<Esc>O" }, { "i", "[ ", "[  ]<left><left>" }, { "v", "[]", "<Esc>`>a ]<Esc>`<i[ <Esc>gv" },
@@ -42,25 +39,23 @@ local keymaps = {
   { "v", "<leader>y", [["+y]] },
   { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
   { "v", "J", ":m '>+1<CR>gv=gv" }, { "v", "K", ":m '<-2<CR>gv=gv" },
-  { "v", "<C-;>/", [[:s/^/\/\//<CR>]] },
-  { "v", "<C-;>-", [[:s/^/--/<CR>]] },
   -- lsp helpers
   { { "n" }, "K", vim.lsp.buf.hover },
   { { "n", "v" }, "<leader>ca", vim.lsp.buf.code_action },
   -- window/buffers/tabs control
-  { "n", "§",     ":bnext <CR>"},  { "n", "±",     ":bprevious <CR>"},
-  { "n", "d§",    ":<C-U>bprevious <bar> bdelete #<CR>" },
-  { "n", "<A-=>", ":tabnew<CR>"},  { "n", "d=",    ":tabclose<CR>"},
-  { "n", "<A-]>", ":tabnext<CR>"}, { "n", "<A-[>", ":tabprevious<CR>"},
-  { "n", "<A-Left>",  ":vertical resize +4<CR>"},   { "n", "<A-Right>", ":vertical resize -4<CR>"},
-  { "n", "<A-Down>",  ":horizontal resize +4<CR>"}, { "n", "<A-Up>",    ":horizontal resize -4<CR>"},
+  { "n", "§",        ":bnext <CR>"},  { "n", "±",     ":bprevious <CR>"},
+  { "n", "d§",       ":<C-U>bprevious <bar> bdelete #<CR>" },
+  { "n", "<A-=>",    ":tabnew<CR>"},  { "n", "d=",    ":tabclose<CR>"},
+  { "n", "<A-]>",    ":tabnext<CR>"}, { "n", "<A-[>", ":tabprevious<CR>"},
+  { "n", "<A-Left>", ":vertical resize +4<CR>"},   { "n", "<A-Right>", ":vertical resize -4<CR>"},
+  { "n", "<A-Down>", ":horizontal resize +4<CR>"}, { "n", "<A-Up>",    ":horizontal resize -4<CR>"},
   -- gui control
-  { "n", "<C-w>a", [[<cmd>Alpha<CR>]] },
-  { "n", "<C-/>", [[<cmd>Lex<CR>]] },
-  { "n", "<C-o>", [[<cmd>lua require('oil').toggle_float()<CR>]]},
-  { { "n", "t" }, "<C-|>", [[<cmd>vsplit term://zsh<CR>i]] },
-  { { "n", "t" }, "<C-\\>", [[<cmd>lua require('FTerm').toggle()<CR>]] },
-  { "t", "<Esc>", [[<C-\><C-n>]] },
+  { "n", "<C-w>a",     [[<cmd>Alpha<CR>]] },
+  { "n", "<C-/>",      [[<cmd>Lex<CR>]] },
+  { "n", "<C-o>",      [[<cmd>lua require('oil').toggle_float()<CR>]]},
+  { { "n", "t" },      "<C-|>", [[<cmd>vsplit term://zsh<CR>i]] },
+  { { "n", "t" },      "<C-\\>", [[<cmd>lua require('FTerm').toggle()<CR>]] },
+  { "t", "<Esc>",      [[<C-\><C-n>]] },
   { "t", "<C-c><C-c>", [[<C-c>exit<CR>]] },
   -- telescope
   { "n", "<C-p>",      ":Telescope find_files theme=dropdown layout_config={mirror=true}<CR>", "Find files" },
