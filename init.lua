@@ -163,39 +163,22 @@ local highlights = {
   TelescopeBorder = "FloatBorder", TelescopeResultsBorder = "TelescopeBorder", TelescopePreviewBorder = "TelescopeBorder", TelescopePromptBorder = "TelescopeBorder",
 }
 
---[[ #helpers ]]--
-local helpers = {
-  apply_settings = function (globals, options)
-    for global, value in pairs(globals) do vim.g[global] = value end
-    for option, value in pairs(options) do vim.opt[option] = value end
-  end,
-  apply_keymaps = function (keymaps)
-    for _, m in pairs(keymaps) do vim.keymap.set(m[1], m[2], m[3], { noremap = true, silent = false, desc = m[4] } ) end
-  end,
-  apply_icons = function (icons)
-    for hl, icon in pairs(icons) do vim.fn.sign_define(hl, { text = icon, texthl = hl }) end
-  end,
-  apply_highlights = function (highlights)
-    for hi, link in pairs(highlights) do vim.cmd("hi clear " .. hi) vim.cmd("hi link " .. hi .. " " ..link) end
-  end,
-  session_load = function ()
-    local dir = vim.fn.stdpath("config") .. "/.sessions"
-    local filename = dir .. "/" .. vim.fn.getcwd():gsub("/", "_") .. ".vim"
-    if vim.fn.filereadable(filename) == 1 then vim.cmd("source " .. filename)
-    else vim.notify("No sessions to load") end
-  end,
-  session_save = function ()
-    local dir = vim.fn.stdpath("config") .. "/.sessions"
-    local filename = dir .. "/" .. vim.fn.getcwd():gsub("/", "_") .. ".vim"
-    if vim.fn.isdirectory(dir) == 0 then vim.fn.mkdir(dir, "p"); vim.cmd("redraw!") end
-    vim.cmd("mksession! " .. filename)
-  end,
-}
-
 --[[ #aliases ]]--
-function SessionLoad() helpers.session_load() end
-function SessionSave() helpers.session_save() end
-function Highlights() helpers.apply_highlights(highlights) end
+function SessionLoad()
+  local dir = vim.fn.stdpath("config") .. "/.sessions"
+  local filename = dir .. "/" .. vim.fn.getcwd():gsub("/", "_") .. ".vim"
+  if vim.fn.filereadable(filename) == 1 then vim.cmd("source " .. filename)
+  else vim.notify("No sessions to load") end
+end
+function SessionSave()
+  local dir = vim.fn.stdpath("config") .. "/.sessions"
+  local filename = dir .. "/" .. vim.fn.getcwd():gsub("/", "_") .. ".vim"
+  if vim.fn.isdirectory(dir) == 0 then vim.fn.mkdir(dir, "p"); vim.cmd("redraw!") end
+  vim.cmd("mksession! " .. filename)
+end
+function Highlights()
+  for hi, link in pairs(highlights) do vim.cmd("hi clear " .. hi) vim.cmd("hi link " .. hi .. " " ..link) end
+end
 
 --[[ #plugins install ]]--
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
@@ -328,10 +311,14 @@ do
 end
 
 --[[ #apply config ]]--
-helpers.apply_settings(globals, options)
-helpers.apply_keymaps(keymaps)
-helpers.apply_icons(icons.diagnostics)
-helpers.apply_highlights(highlights)
+-- settings
+for global, value in pairs(globals) do vim.g[global] = value end
+for option, value in pairs(options) do vim.opt[option] = value end
+-- keymaps
+for _, m in pairs(keymaps) do vim.keymap.set(m[1], m[2], m[3], { noremap = true, silent = false, desc = m[4] } ) end
+-- icons
+for hl, icon in pairs(icons.diagnostics) do vim.fn.sign_define(hl, { text = icon, texthl = hl }) end
+
 vim.cmd[[set path+=**]]
 vim.cmd[[set wildmenu]]
 vim.cmd[[autocmd VimResized * :wincmd =]]
