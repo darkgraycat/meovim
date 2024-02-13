@@ -43,7 +43,7 @@ local keymaps = {
   { "v", "<leader>y", [["+y]] },
   { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
   { "v", "J", ":m '>+1<CR>gv=gv" }, { "v", "K", ":m '<-2<CR>gv=gv" },
-  { "n", "X", [[:s/\([\[{(,]\)/\1\r <CR>:s/ \?\([\]})]\)/\r\1<CR><up>]], "Split lines" },
+  { "n", "X", [[:s/\([\[{(]\|,\)\|\([\]})]\)/\1\r\2<CR>]] },
   -- lsp helpers
   { { "n" }, "K", vim.lsp.buf.hover },
   { { "n", "v" }, "<leader>ca", vim.lsp.buf.code_action },
