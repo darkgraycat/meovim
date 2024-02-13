@@ -51,15 +51,17 @@ Total `20` plugins used, including `5` colorchemes:
 ```
 ----
 #### Useful keymaps
-Brackets autopairs
+Autopairing & surrounding symbols
 ```
-For [] {} () '' "" `` /**/ works:
-    surround words in Visual mode
-    auto pair in Insert mode
-For [] {} () additionaly works:
-    auto open on Enter in Insert mode (usefull for functions)
-    auto open on Space in Insert mode (usefull for destructurization)
+In insert mode:
+Press one of { ( [ " ' ` /* followed by
+  <space> - to autopair in line
+  <enter> - to opern autopair (only for { ( [ )
+In visual mode:
+Select range of characters followed by open and closed bracket
+  or double tap for strings
 ```
+Surrounding symbols
 LSP stuff:
 ```
 <Tab> / <S-Tab> - cycle autocomplete suggestions

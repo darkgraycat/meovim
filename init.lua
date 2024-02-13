@@ -23,28 +23,30 @@ local colorscheme = "nordic"
 local keymaps = {
   -- buffer control
   { { "i", "c" }, "jk", "<Esc>" },
+  { { "i", "c" }, "<S-BS>", "<right><BS>" },
   { { "n", "v" }, "<C-d>", "<C-d>zz" }, { { "n", "v" }, "<C-u>", "<C-u>zz" },
   { { "n", "v" }, "<C-j>", "5j" }, { { "n", "v" }, "<C-k>", "5k" },
-  { { "n", "v" }, "<C-h>", "2b" }, { { "n", "v" }, "<C-l>", "2w" },
-  { "i", "<C-h>", "<left>" }, { "i", "<C-l>", "<right>" },
-  { "i", "<C-j>", "<down>" }, { "i", "<C-k>", "<up>" },
-  -- autopair brackets
-  { "i", "{", "{}<left>" }, { "i", "{}", "{}" }, { "i", "{<CR>", "{<CR>}<Esc>O" }, { "i", "{ ", "{  }<left><left>" }, { "v", "{}", "<Esc>`>a }<Esc>`<i{ <Esc>gv" },
-  { "i", "[", "[]<left>" }, { "i", "[]", "[]" }, { "i", "[<CR>", "[<CR>]<Esc>O" }, { "i", "[ ", "[  ]<left><left>" }, { "v", "[]", "<Esc>`>a]<Esc>`<i[<Esc>gv" },
-  { "i", "(", "()<left>" }, { "i", "()", "()" }, { "i", "(<CR>", "(<CR>)<Esc>O" }, { "i", "( ", "(  )<left><left>" }, { "v", "()", "<Esc>`>a)<Esc>`<i(<Esc>gv" },
-  -- autopair strings
-  { "i", "`", "``<left>" }, { "i", "``", "``" }, { "v", "``", "<Esc>`>a`<Esc>`<i`<Esc>gv" },
-  { "i", "'", "''<left>" }, { "i", "''", "''" }, { "v", "''", "<Esc>`>a'<Esc>`<i'<Esc>gv" },
-  { "i", '"', '""<left>' }, { "i", '""', '""' }, { "v", '""', '<Esc>`>a"<Esc>`<i"<Esc>gv' },
-  { "i", "/*", "/**/<left><left>" }, { "v", "/*", "<Esc>`>a*/<Esc>`<i/*" },
-  -- small helpers
-  { "i", ";;", "<Esc>A;<CR>"},
+  { { "n", "v" }, "<C-h>", "B" }, { { "n", "v" }, "<C-l>", "W" },
+  { "i", ";;", "<Esc>A;<CR>"}, { "i", "..", "<Esc>Ea" }, { "i", ",,", "<Esc>Bi" },
   { "i", "<<",    "<Esc>I"  }, { "i", ">>",    "<Esc>A"  },
-  { "i", "<C-,>", "<Esc>bi" }, { "i", "<C-.>", "<Esc>ea" },
+  { "i", "<C-,>", "<left>" },  { "i", "<C-.>", "<right>" },
   { "v", "<leader>y", [["+y]] },
   { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
   { "v", "J", ":m '>+1<CR>gv=gv" }, { "v", "K", ":m '<-2<CR>gv=gv" },
   { "n", "X", [[:s/\([\[{(]\|,\)\|\([\]})]\)/\1\r\2<CR>]] },
+  -- autopairing symbols
+  { "i", "{ ", "{  }<left><left>" }, { "i", "{<CR>", "{<CR>}<Esc>O" },
+  { "i", "( ", "()<left>" },         { "i", "(<CR>", "(<CR>)<Esc>O" },
+  { "i", "[ ", "[]<left>" },         { "i", "[<CR>", "[<CR>]<Esc>O" },
+  { "i", '" ', '""<left>' },         { "i", "' ", "''<left>" },
+  { "i", "/* ","/**/<left><left>" }, { "i", "` ", "``<left>" },
+  -- surrounding symbols
+  { "v", "{}", "<Esc>`>a }<Esc>`<i{ <Esc>gv" },
+  { "v", "[]", "<Esc>`>a]<Esc>`<i[<Esc>gv" },
+  { "v", "()", "<Esc>`>a)<Esc>`<i(<Esc>gv" },
+  { "v", "``", "<Esc>`>a`<Esc>`<i`<Esc>gv" },
+  { "v", "''", "<Esc>`>a'<Esc>`<i'<Esc>gv" },
+  { "v", '""', '<Esc>`>a"<Esc>`<i"<Esc>gv' },
   -- window/buffers/tabs control
   { "n", "§",        ":bnext <CR>"},  { "n", "±",     ":bprevious <CR>"},
   { "n", "d§",       ":<C-U>bprevious <bar> bdelete #<CR>" },
