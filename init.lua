@@ -25,20 +25,25 @@ local keymaps = {
   { { "n", "v" }, "<C-d>", "<C-d>zz" }, { { "n", "v" }, "<C-u>", "<C-u>zz" },
   { { "n", "v" }, "<C-j>", "5j" }, { { "n", "v" }, "<C-k>", "5k" },
   { { "n", "v" }, "<C-h>", "2b" }, { { "n", "v" }, "<C-l>", "2w" },
+  { "i", "<C-h>", "<left>" }, { "i", "<C-l>", "<right>" },
+  { "i", "<C-j>", "<down>" }, { "i", "<C-k>", "<up>" },
   -- autopair brackets
   { "i", "{", "{}<left>" }, { "i", "{}", "{}" }, { "i", "{<CR>", "{<CR>}<Esc>O" }, { "i", "{ ", "{  }<left><left>" }, { "v", "{}", "<Esc>`>a }<Esc>`<i{ <Esc>gv" },
-  { "i", "[", "[]<left>" }, { "i", "[]", "[]" }, { "i", "[<CR>", "[<CR>]<Esc>O" }, { "i", "[ ", "[  ]<left><left>" }, { "v", "[]", "<Esc>`>a ]<Esc>`<i[ <Esc>gv" },
-  { "i", "(", "()<left>" }, { "i", "()", "()" }, { "i", "(<CR>", "(<CR>)<Esc>O" }, { "i", "( ", "(  )<left><left>" }, { "v", "()", "<Esc>`>a )<Esc>`<i( <Esc>gv" },
+  { "i", "[", "[]<left>" }, { "i", "[]", "[]" }, { "i", "[<CR>", "[<CR>]<Esc>O" }, { "i", "[ ", "[  ]<left><left>" }, { "v", "[]", "<Esc>`>a]<Esc>`<i[<Esc>gv" },
+  { "i", "(", "()<left>" }, { "i", "()", "()" }, { "i", "(<CR>", "(<CR>)<Esc>O" }, { "i", "( ", "(  )<left><left>" }, { "v", "()", "<Esc>`>a)<Esc>`<i(<Esc>gv" },
   -- autopair strings
   { "i", "`", "``<left>" }, { "i", "``", "``" }, { "v", "``", "<Esc>`>a`<Esc>`<i`<Esc>gv" },
   { "i", "'", "''<left>" }, { "i", "''", "''" }, { "v", "''", "<Esc>`>a'<Esc>`<i'<Esc>gv" },
   { "i", '"', '""<left>' }, { "i", '""', '""' }, { "v", '""', '<Esc>`>a"<Esc>`<i"<Esc>gv' },
   { "i", "/*", "/**/<left><left>" }, { "v", "/*", "<Esc>`>a*/<Esc>`<i/*" },
   -- small helpers
-  { "i", ";;", "<Esc>A;<CR>"}, { "i", "<<", "<Esc>bi"}, { "i", ">>", "<Esc>ea" },
+  { "i", ";;", "<Esc>A;<CR>"},
+  { "i", "<<",    "<Esc>I"  }, { "i", ">>",    "<Esc>A"  },
+  { "i", "<C-,>", "<Esc>bi" }, { "i", "<C-.>", "<Esc>ea" },
   { "v", "<leader>y", [["+y]] },
   { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
   { "v", "J", ":m '>+1<CR>gv=gv" }, { "v", "K", ":m '<-2<CR>gv=gv" },
+  { "n", "X", [[:s/\([\[{(,]\)/\1\r <CR>:s/ \?\([\]})]\)/\r\1<CR><up>]], "Split lines" },
   -- lsp helpers
   { { "n" }, "K", vim.lsp.buf.hover },
   { { "n", "v" }, "<leader>ca", vim.lsp.buf.code_action },
@@ -99,7 +104,6 @@ local options = {
   foldlevelstart = 99,
   foldmethod = "indent",
   -- look
-  background = "dark",
   termguicolors = true,
   number = true,
   relativenumber = true,
@@ -306,12 +310,9 @@ do
 end
 
 --[[ #apply config ]]--
--- settings
 for global, value in pairs(globals) do vim.g[global] = value end
 for option, value in pairs(options) do vim.opt[option] = value end
--- keymaps
-for _, m in pairs(keymaps) do vim.keymap.set(m[1], m[2], m[3], { noremap = true, silent = false, desc = m[4] } ) end
--- icons
+for _, km in pairs(keymaps) do vim.keymap.set(km[1], km[2], km[3], { noremap = true, silent = false, desc = km[4] } ) end
 for hl, icon in pairs(icons.diagnostics) do vim.fn.sign_define(hl, { text = icon, texthl = hl }) end
 
 vim.cmd[[set path+=**]]
