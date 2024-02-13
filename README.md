@@ -2,7 +2,7 @@
 `Minimal Neovim configuration`
 ----
 #### Target
-1. As small as possible config file `< 400~ lines`
+1. As small as possible config file `< 340~ lines`
 2. Painless work even without plugins
 3. Ease to customize
 4. Structured and readable config
