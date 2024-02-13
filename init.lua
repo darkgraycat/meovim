@@ -16,7 +16,8 @@ local meovim = {
   [[                    ░▒▓▓▒▒▓█▓░                    ]],
   [[                    ░▒▒░░▒▒░▒░                    ]],
 }
-local colors = "nordic"
+--[[ #colorscheme ]]--
+local colorscheme = "nordic"
 
 --[[ #keymaps ]]--
 local keymaps = {
@@ -44,9 +45,6 @@ local keymaps = {
   { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
   { "v", "J", ":m '>+1<CR>gv=gv" }, { "v", "K", ":m '<-2<CR>gv=gv" },
   { "n", "X", [[:s/\([\[{(]\|,\)\|\([\]})]\)/\1\r\2<CR>]] },
-  -- lsp helpers
-  { { "n" }, "K", vim.lsp.buf.hover },
-  { { "n", "v" }, "<leader>ca", vim.lsp.buf.code_action },
   -- window/buffers/tabs control
   { "n", "§",        ":bnext <CR>"},  { "n", "±",     ":bprevious <CR>"},
   { "n", "d§",       ":<C-U>bprevious <bar> bdelete #<CR>" },
@@ -72,7 +70,14 @@ local keymaps = {
   { "n", "<leader>fr", ":Telescope lsp_references<CR>", "LSP references" },
   { "n", "<leader>fd", ":Telescope lsp_definitions<CR>", "LSP definitions" },
   { "n", "<leader>fs", ":Telescope lsp_document_symbols<CR>", "LSP symbols" },
-  { "n", "<leader>fR", ":Telescope resume<CR>", "Resume" },
+  { "n", "<leader>F",  ":Telescope resume<CR>", "Resume" },
+}
+
+--[[ #lsp configurations ]]
+local lsp_configurations = {
+  servers = { "lua_ls", "clangd", "tsserver", "rust_analyzer", "intelephense" },
+  cmpkeys = { Next="<Tab>", Prev="<S-Tab>", Abort="<C-c>", Confirm="<CR>" },
+  lspkeys = { Hover="K", Signature="<A-k>", CodeAction="<leader>ca", Format="<leader>cf" },
 }
 
 --[[ #globals ]]--
@@ -148,7 +153,10 @@ local icons = {
     Constant = "󰏿 ", Struct = " ", Event = " ", Operator = "󰆕 ", TypeParameter = " ",
   },
   diagnostics = { DiagnosticSignError = "", DiagnosticSignWarn = "", DiagnosticSignInfo = "", DiagnosticSignHint = "󰌵 " },
-  dashboard = { NewFile = "󰝒", FindFile = "󰱼", FindText = "󱎸", RestoreSession = "󰁯", Settings = "", Quit = "󰄛" }
+  dashboard = { NewFile = "󰝒", FindFile = "󰱼", FindText = "󱎸", RestoreSession = "󰁯", Settings = "", Quit = "󰄛" },
+  statusline = { "", "", "╲", "╱" },
+  -- statusline = { "", "", "╲╲", "╲╲" },
+  -- statusline = { "▓▒░", "░▒▓", "░", "░" },
 }
 
 --[[ #highlights ]]--
@@ -179,7 +187,7 @@ function Highlights()
   for hi, link in pairs(highlights) do vim.cmd("hi clear " .. hi) vim.cmd("hi link " .. hi .. " " ..link) end
 end
 
---[[ #plugins install ]]--
+--[[ #plugins configutaions ]]--
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
   vim.fn.system({
@@ -193,121 +201,124 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-require("lazy").setup({
+require"lazy".setup({
   -- ui
-  { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" } },
-  { "nvim-lualine/lualine.nvim",     dependencies = { "nvim-tree/nvim-web-devicons" } },
-  { "stevearc/oil.nvim",             dependencies = { "nvim-tree/nvim-web-devicons" } },
-  { "numToStr/FTerm.nvim" },
+  { "nvim-telescope/telescope.nvim", dependencies = { "nvim-lua/plenary.nvim" }, config = function ()
+    require"telescope".setup {
+      defaults = {
+        wrap_results          = false,
+        path_display          = { "smart" },
+        file_ignore_patterns  = { "node_modules/.*", "build/.*", "dist/.*" },
+        layout_config         = { prompt_position = "top" },
+        sorting_strategy      = 'ascending',
+        selection_caret       = "> ",
+      },
+      pickers = {
+        find_files            = { layout_strategy = "horizontal" },
+        live_grep             = { layout_strategy = "horizontal" },
+        git_status            = { layout_strategy = "horizontal" },
+        buffers               = { layout_strategy = "horizontal", theme = "dropdown" },
+        diagnostics           = { layout_strategy = "vertical", theme = "ivy", wrap_results = true, path_display = { "hidden" } },
+        lsp_document_symbols  = { layout_strategy = "vertical", theme = "ivy" },
+        lsp_references        = { theme = "cursor", jump_type = "never", path_display = { "tail" } },
+        lsp_definitions       = { theme = "cursor", jump_type = "never", path_display = { "tail" } },
+        colorscheme           = { enable_preview = true },
+      },
+    }
+  end },
+  { "nvim-lualine/lualine.nvim", dependencies = { "nvim-tree/nvim-web-devicons" }, config = function ()
+    require"lualine".setup {
+      extensions = { "oil" },
+      options = {
+        component_separators = { left = icons.statusline[3], right = icons.statusline[4]},
+        section_separators   = { left = icons.statusline[1], right = icons.statusline[2]},
+      },
+      sections = {
+        lualine_a = { "mode", "location" }, lualine_b = { "diagnostics", "diff" }, lualine_c = { { "filename", path = 1 } },
+        lualine_x = { "encoding" },         lualine_y = { "filetype" },            lualine_z = { "selectioncount", "progress" },
+      },
+      tabline = {
+        lualine_a = { { "buffers", max_length = vim.o.columns * 0.8 } },
+        lualine_x = { "branch" }, lualine_z = { "tabs" },
+      },
+    }
+  end },
+  { "stevearc/oil.nvim", dependencies = { "nvim-tree/nvim-web-devicons" }, config = function ()
+    require"oil".setup {
+      columns = {
+        { "mtime", highlight = "Comment" },
+        { "size",  highlight = "Label" },
+        { "icon",  highlight = "Normal" },
+      },
+      default_file_explorer = false,
+      win_options = { number = false, relativenumber = false, conceallevel = 3, concealcursor = "nvic" },
+      float = { border = "rounded", padding = 2, max_width = 120, max_height = 40 },
+    }
+  end },
+  { "numToStr/FTerm.nvim", config = function ()
+    require"FTerm".setup { border = "rounded" }
+  end },
   -- content
   { "nvim-treesitter/nvim-treesitter" },
-  { "neovim/nvim-lspconfig" },
-  { "williamboman/mason.nvim",       dependencies = { "williamboman/mason-lspconfig.nvim"} },
-  { "hrsh7th/cmp-nvim-lsp",          dependencies = { "hrsh7th/nvim-cmp"} },
-  { "L3MON4D3/LuaSnip" },
-  -- misc & themes
-  { "goolord/alpha-nvim" },
+  { "williamboman/mason.nvim", dependencies = { "williamboman/mason-lspconfig.nvim" }, config = function ()
+    require"mason".setup {}
+    require"mason-lspconfig".setup { ensure_installed = lsp_configurations.servers }
+  end },
+  { "neovim/nvim-lspconfig", dependencies = { "hrsh7th/cmp-nvim-lsp" }, config = function ()
+    local lspconfig = require"lspconfig"
+    local on_attach = function (e, bufn)
+      local opts = { buffer = bufn, noremap = true, silent = true }
+      vim.keymap.set("n", lsp_configurations.lspkeys.Hover, vim.lsp.buf.hover, opts)
+      vim.keymap.set("n", lsp_configurations.lspkeys.Format, vim.lsp.buf.format, opts)
+      vim.keymap.set("n", lsp_configurations.lspkeys.Signature, vim.lsp.buf.signature_help, opts)
+      vim.keymap.set("n", lsp_configurations.lspkeys.CodeAction, vim.lsp.buf.code_action, opts)
+      vim.notify("LSP attached: " .. e.name)
+    end
+    local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+    for _, lsp in ipairs(lsp_configurations.servers) do lspconfig[lsp].setup({ capabilities = capabilities, on_attach = on_attach }) end
+    vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
+    vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
+  end },
+  { "hrsh7th/nvim-cmp", dependencies = { "L3MON4D3/LuaSnip" }, config = function ()
+    local cmp = require"cmp"
+    cmp.setup {
+      sources = { { name = "nvim_lsp" }, { name = "buffer" }, { name = "luasnip" } },
+      snippet = { expand = function(args) require"luasnip".lsp_expand(args.body) end },
+      formatting = { format = function(_, i) local kind = i.kind i.kind = (icons.autocomplete[kind] or "?") i.menu = "" .. kind return i end },
+      window = { completion = cmp.config.window.bordered(), documentation = cmp.config.window.bordered() },
+      mapping = {
+        [lsp_configurations.cmpkeys.Next] = cmp.mapping.select_next_item(),
+        [lsp_configurations.cmpkeys.Prev] = cmp.mapping.select_prev_item(),
+        [lsp_configurations.cmpkeys.Abort] = cmp.mapping.abort(),
+        [lsp_configurations.cmpkeys.Confirm] = cmp.mapping.confirm({ select = false }),
+      },
+    }
+  end },
+  -- dashboard
+  { "goolord/alpha-nvim", config = function ()
+    local alpha_th = require"alpha.themes.theta"
+    local alpha_db = require"alpha.themes.dashboard"
+    local alpha_time = tostring(os.date("%A %I:%M %p"))
+    alpha_th.header.val = meovim
+    alpha_th.buttons.val = {
+      { type = "text", val = "╭"..string.rep("─", 48 - string.len(alpha_time))..alpha_time.."╮", opts = { hl = "FloatBorder", position = "center" } },
+      alpha_db.button("e", icons.dashboard.NewFile        .. "  New file",        ":ene <BAR> startinsert <CR>"),
+      alpha_db.button("f", icons.dashboard.FindFile       .. "  Find file",       ":Telescope find_files <CR>"),
+      alpha_db.button("g", icons.dashboard.FindText       .. "  Find text",       ":Telescope live_grep <CR>"),
+      alpha_db.button("r", icons.dashboard.RestoreSession .. "  Restore session", ":lua SessionLoad() <CR>"),
+      alpha_db.button("s", icons.dashboard.Settings       .. "  Settings",        ":e ~/.config/nvim/init.lua<CR>"),
+      alpha_db.button("q", icons.dashboard.Quit           .. "  Quit",            ":qa<CR>"),
+      { type = "text", val = "╰"..string.rep("─", 48).."╯", opts = { hl = "FloatBorder", position = "center" } },
+    }
+    require"alpha".setup(alpha_th.config)
+  end },
+  -- colorschemes
   { "folke/tokyonight.nvim", name = "tokyonight" },
   { "akinsho/horizon.nvim", name = "horizon" },
   { "rose-pine/neovim", name = "rosepine" },
   { "AlexvZyl/nordic.nvim", name = "nordic" },
   { "catppuccin/nvim", name = "catppuccin" },
 }, {})
-
---[[ #plugins config ]]--
-do
-  require"telescope".setup {
-    defaults = {
-      wrap_results          = false,
-      path_display          = { "smart" },
-      file_ignore_patterns  = { "node_modules/.*", "build/.*", "dist/.*" },
-      layout_config         = { prompt_position = "top" },
-      sorting_strategy      = 'ascending',
-      selection_caret       = "> ",
-    },
-    pickers = {
-      find_files            = { layout_strategy = "horizontal" },
-      live_grep             = { layout_strategy = "horizontal" },
-      git_status            = { layout_strategy = "horizontal" },
-      buffers               = { layout_strategy = "horizontal", theme = "dropdown" },
-      diagnostics           = { layout_strategy = "vertical", theme = "ivy", wrap_results = true, path_display = { "hidden" } },
-      lsp_document_symbols  = { layout_strategy = "vertical", theme = "ivy" },
-      lsp_references        = { theme = "cursor", jump_type = "never", path_display = { "tail" } },
-      lsp_definitions       = { theme = "cursor", jump_type = "never", path_display = { "tail" } },
-      colorscheme           = { enable_preview = true },
-    },
-  }
-  require"lualine".setup {
-    options = {
-      component_separators = { left = '╲', right = '╱'},
-      section_separators   = { left = '', right = ''},
-      --component_separators = { left = '╲╲', right = '╲╲'},
-      --section_separators   = { left = "", right = ""},
-      --component_separators = { left = "░", right = "░" },
-      --section_separators   = { left = "▓▒░", right = "░▒▓" },
-    },
-    sections = {
-      lualine_a = { "mode", "location" },
-      lualine_b = { "diagnostics", "diff" },
-      lualine_c = { { "filename", path = 1 } },
-      lualine_x = { "encoding" },
-      lualine_y = { "filetype" },
-      lualine_z = { "selectioncount", "progress" },
-    },
-    tabline = {
-      lualine_a = { { "buffers", max_length = vim.o.columns * 0.8 } },
-      lualine_x = { "branch" },
-      lualine_z = { "tabs" },
-    },
-    extensions = { "oil" },
-  }
-  require"FTerm".setup { border = "rounded" }
-  require"oil".setup {
-    columns = {
-      { "mtime", highlight = "Comment" },
-      { "size",  highlight = "Label" },
-      { "icon",  highlight = "Normal" },
-    },
-    default_file_explorer = false,
-    win_options = { number = false, relativenumber = false, conceallevel = 3, concealcursor = "nvic" },
-    float = { border = "rounded", padding = 2, max_width = 120, max_height = 40 },
-  }
-  local language_servers = { "lua_ls", "clangd", "tsserver", "rust_analyzer", "intelephense" }
-  require"mason".setup {}
-  require"mason-lspconfig".setup { ensure_installed = language_servers }
-  local lspconfig = require"lspconfig"
-  local cmp = require"cmp"
-  local capabilities = require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
-  for _, lsp in ipairs(language_servers) do lspconfig[lsp].setup({ capabilities = capabilities }) end
-  vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
-  cmp.setup {
-    sources = { { name = "nvim_lsp" }, { name = "buffer" }, { name = "luasnip" } },
-    snippet = { expand = function(args) require"luasnip".lsp_expand(args.body) end },
-    formatting = { format = function(_, i) local kind = i.kind i.kind = (icons.autocomplete[kind] or "?") i.menu = "" .. kind return i end },
-    window = { completion = cmp.config.window.bordered(), documentation = cmp.config.window.bordered() },
-    mapping = {
-      ["<Tab>"] = cmp.mapping.select_next_item(),
-      ["<S-Tab>"] = cmp.mapping.select_prev_item(),
-      ["<C-c>"] = cmp.mapping.abort(),
-      ["<CR>"] = cmp.mapping.confirm({ select = false }),
-    },
-  }
-  local alpha_th = require"alpha.themes.theta"
-  local alpha_db = require"alpha.themes.dashboard"
-  local alpha_time = tostring(os.date("%A %I:%M %p"))
-  alpha_th.header.val = meovim
-  alpha_th.buttons.val = {
-    { type = "text", val = "╭"..string.rep("─", 48 - string.len(alpha_time))..alpha_time.."╮", opts = { hl = "TelescopeBorder", position = "center" } },
-    alpha_db.button("e", icons.dashboard.NewFile        .. "  New file",        ":ene <BAR> startinsert <CR>"),
-    alpha_db.button("f", icons.dashboard.FindFile       .. "  Find file",       ":Telescope find_files <CR>"),
-    alpha_db.button("g", icons.dashboard.FindText       .. "  Find text",       ":Telescope live_grep <CR>"),
-    alpha_db.button("r", icons.dashboard.RestoreSession .. "  Restore session", ":lua SessionLoad() <CR>"),
-    alpha_db.button("s", icons.dashboard.Settings       .. "  Settings",        ":e ~/.config/nvim/init.lua<CR>"),
-    alpha_db.button("q", icons.dashboard.Quit           .. "  Quit",            ":qa<CR>"),
-    { type = "text", val = "╰"..string.rep("─", 48).."╯", opts = { hl = "TelescopeBorder", position = "center" } },
-  }
-  require"alpha".setup(alpha_th.config)
-end
 
 --[[ #apply config ]]--
 for global, value in pairs(globals) do vim.g[global] = value end
@@ -321,4 +332,4 @@ vim.cmd[[autocmd VimResized * :wincmd =]]
 vim.cmd[[autocmd WinEnter * if winnr('$') == 1 && getbufvar(winbufnr(winnr()), "&filetype") == "netrw"|q|endif]]
 vim.cmd[[autocmd VimLeave * lua if vim.fn.confirm("Save session?", "&Yes\n&No", 2) == 1 then SessionSave() end]]
 vim.cmd[[autocmd ColorScheme * lua Highlights()]]
-vim.cmd("colorscheme " .. colors)
+vim.cmd("colorscheme " .. colorscheme)
