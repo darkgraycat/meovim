@@ -96,10 +96,13 @@ GUI:
 ```
 For very lazy me:
 ```
-jk - exit Insert, Command mode
+jk - exit Insert or Command mode
 <C-j>, <C-k> - scroll up/down 5 lines
-<C-h>, <C-l> - scroll left/right 2 words
-;;  - add ; at the end in Insert mode
->> << - next/previos word in Insert mode
+<C-h>, <C-l> - scroll left/right by word
+;;          - add ; at the end in Insert mode
+,, ..       - move left/right by word in Insert mode
+<C-,> <C-.> - move left/right by char in Insert mode
+<< >>       - start/end of line in Insert mode
+
 ```
 And more...
