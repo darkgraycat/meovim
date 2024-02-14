@@ -23,7 +23,7 @@ local colorscheme = "nordic"
 local keymaps = {
   -- buffer control
   { { "i", "c" }, "jk", "<Esc>" },
-  { { "i", "c" }, "<S-BS>", "<right><BS>" },
+  { { "i", "c" }, "<C-BS>", "<right><BS>" },
   { { "n", "v" }, "<C-d>", "<C-d>zz" }, { { "n", "v" }, "<C-u>", "<C-u>zz" },
   { { "n", "v" }, "<C-j>", "5j" }, { { "n", "v" }, "<C-k>", "5k" },
   { { "n", "v" }, "<C-h>", "B" }, { { "n", "v" }, "<C-l>", "W" },
@@ -33,7 +33,7 @@ local keymaps = {
   { "v", "<leader>y", [["+y]] },
   { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
   { "v", "J", ":m '>+1<CR>gv=gv" }, { "v", "K", ":m '<-2<CR>gv=gv" },
-  { "n", "X", [[:s/\([\[{(]\|,\)\|\([\]})]\)/\1\r\2<CR>]] },
+  { "n", "X", [[:s/\([\[{(]\|,\)\|\([\]})]\)/\1\r\2<CR>==]] },
   -- autopairing symbols
   { "i", "{ ", "{  }<left><left>" }, { "i", "{<CR>", "{<CR>}<Esc>O" },
   { "i", "( ", "()<left>" },         { "i", "(<CR>", "(<CR>)<Esc>O" },
