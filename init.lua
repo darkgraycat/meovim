@@ -35,10 +35,10 @@ local keymaps = {
   { "v", "J", ":m '>+1<CR>gv=gv" }, { "v", "K", ":m '<-2<CR>gv=gv" },
   { "n", "X", [[:s/\([\[{(]\|,\)\|\([\]})]\)/\1\r\2<CR>==]] },
   -- autopairing symbols
-  { "i", "{ ", "{  }<left><left>" }, { "i", "{<CR>", "{<CR>}<Esc>O" },
-  { "i", "( ", "()<left>" },         { "i", "(<CR>", "(<CR>)<Esc>O" },
-  { "i", "[ ", "[]<left>" },         { "i", "[<CR>", "[<CR>]<Esc>O" },
-  { "i", '" ', '""<left>' },         { "i", "' ", "''<left>" },
+  { "i", "{{", "{}<left>" },         { "i", "{<CR>", "{<CR>}<Esc>O" },
+  { "i", "((", "()<left>" },         { "i", "(<CR>", "(<CR>)<Esc>O" },
+  { "i", "[[", "[]<left>" },         { "i", "[<CR>", "[<CR>]<Esc>O" },
+  { "i", '""', '""<left>' },         { "i", "' ", "''<left>" },
   { "i", "/* ","/**/<left><left>" }, { "i", "` ", "``<left>" },
   -- surrounding symbols
   { "v", "{}", "<Esc>`>a }<Esc>`<i{ <Esc>gv" },
@@ -141,7 +141,7 @@ local options = {
   splitright = true,
   splitbelow = true,
   fillchars = [[eob: ,fold: ,foldopen:,foldsep: ,foldclose:]],
-  listchars = [[multispace:. ,tab:⬄  ,]],
+  listchars = [[multispace:· ,tab:⬄  ,]],
   list = true,
 }
 
