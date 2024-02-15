@@ -73,6 +73,13 @@ local keymaps = {
   { "n", "<leader>fd", ":Telescope lsp_definitions<CR>", "LSP definitions" },
   { "n", "<leader>fs", ":Telescope lsp_document_symbols<CR>", "LSP symbols" },
   { "n", "<leader>F",  ":Telescope resume<CR>", "Resume" },
+  -- git
+  { "n", "<C-g>k", ":Gitsigns preview_hunk<CR>", "Preview hunk" },
+  { "n", "<C-g>j", ":Gitsigns next_hunk<CR>", "Next hunk" },
+  { "n", "<C-g>p", ":Gitsigns prev_hunk<CR>", "Prev hunk" },
+  { "n", "<C-g>bl",":Gitsigns blame_line<CR>", "Blame line" },
+  { "n", "<C-g>bt",":Gitsigns toggle_current_line_blame<CR>", "Blame line" },
+  { "n", "<C-g>d", ":Gitsigns diffthis<CR>", "Diff this" },
 }
 
 --[[ #lsp configurations ]]
@@ -259,6 +266,12 @@ require"lazy".setup({
   end },
   { "numToStr/FTerm.nvim", config = function ()
     require"FTerm".setup { border = "rounded" }
+  end },
+  { "lewis6991/gitsigns.nvim", config = function ()
+    require"gitsigns".setup {
+      auto_attach = true,
+      current_line_blame_formatter = "<author>, <author_time:%Y-%m-%d> - <summary>"
+    }
   end },
   -- content
   { "nvim-treesitter/nvim-treesitter" },
