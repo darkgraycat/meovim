@@ -55,8 +55,8 @@ Autopairing & surrounding symbols
 ```
 In insert mode:
 Press one of { ( [ " ' ` /* followed by
-  <same key again> - to autopair in line (double tap)
-  <enter>          - to opern autopair (only for { ( [ )
+  <space> - to autopair in line
+  <enter> - to opern autopair (only for { ( [ )
 In visual mode:
 Select range of characters followed by open and closed bracket
   or double tap for strings
