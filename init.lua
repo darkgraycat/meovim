@@ -17,7 +17,7 @@ local meovim = {
   [[                    ░▒▒░░▒▒░▒░                    ]],
 }
 --[[ #colorscheme ]]--
-local colorscheme = "nordic"
+local colorscheme = "horizon"
 
 --[[ #keymaps ]]--
 local keymaps = {
@@ -35,10 +35,10 @@ local keymaps = {
   { "v", "J", ":m '>+1<CR>gv=gv" }, { "v", "K", ":m '<-2<CR>gv=gv" },
   { "n", "X", [[:s/\([\[{(]\|,\)\|\([\]})]\)/\1\r\2<CR>==]] },
   -- autopairing symbols
-  { "i", "{<space>", "{}<left>" }, { "i", "{<CR>", "{<CR>}<Esc>O" },
-  { "i", "(<space>", "()<left>" }, { "i", "(<CR>", "(<CR>)<Esc>O" },
-  { "i", "[<space>", "[]<left>" }, { "i", "[<CR>", "[<CR>]<Esc>O" },
-  { "i", '"<space>', '""<left>' }, { "i", "' ", "''<left>" },
+  { "i", "{ ", "{}<left>" }, { "i", "{<CR>", "{<CR>}<Esc>O" },
+  { "i", "( ", "()<left>" }, { "i", "(<CR>", "(<CR>)<Esc>O" },
+  { "i", "[ ", "[]<left>" }, { "i", "[<CR>", "[<CR>]<Esc>O" },
+  { "i", '" ', '""<left>' }, { "i", "' ", "''<left>" },
   { "i", "/* ","/**/<left><left>" }, { "i", "` ", "``<left>" },
   -- surrounding symbols
   { "v", "{}", "<Esc>`>a }<Esc>`<i{ <Esc>gv" },
@@ -60,7 +60,7 @@ local keymaps = {
   { "n", "<C-o>",      [[<cmd>lua require('oil').toggle_float()<CR>]]},
   { { "n", "t" },      "<A-\\>", [[<cmd>vsplit term://zsh<CR>i]] },
   { { "n", "t" },      "<C-\\>", [[<cmd>lua require('FTerm').toggle()<CR>]] },
-  { "t", "<Esc>",      [[<C-\><C-n>]] },
+  { "t", "<Esc><Esc>",      [[<C-\><C-n>]] },
   { "t", "<C-c><C-c>", [[<C-c>exit<CR>]] },
   -- telescope
   { "n", "<C-p>",      ":Telescope find_files theme=dropdown layout_config={mirror=true}<CR>", "Find files" },
@@ -80,6 +80,8 @@ local keymaps = {
   { "n", "<C-g>b", ":Gitsigns blame_line<CR>", "Blame line" },
   { "n", "<C-g>bt",":Gitsigns toggle_current_line_blame<CR>", "Blame line" },
   { "n", "<C-g>d", ":Gitsigns diffthis<CR>", "Diff this" },
+  -- hanlde typos
+  { {"n", "v" }, "q:", "" },
 }
 
 --[[ #lsp configurations ]]
@@ -170,10 +172,10 @@ local icons = {
 
 --[[ #highlights ]]--
 local highlights = {
-  --NormalNC = "Normal",
-  --NormalFloat = "Normal",
-  --FloatTitle = "Title",
-  --FloatBorder = "Function",
+  NormalNC = "Normal",
+  NormalFloat = "Normal",
+  FloatTitle = "Title",
+  FloatBorder = "Function",
   TelescopeTitle = "FloatTitle",   TelescopeResultsTitle  = "TelescopeTitle",  TelescopePreviewTitle  = "TelescopeTitle",  TelescopePromptTitle  = "TelescopeTitle",
   TelescopeNormal = "NormalFloat", TelescopeResultsNormal = "TelescopeNormal", TelescopePreviewNormal = "TelescopeNormal", TelescopePromptNormal = "TelescopeNormal",
   TelescopeBorder = "FloatBorder", TelescopeResultsBorder = "TelescopeBorder", TelescopePreviewBorder = "TelescopeBorder", TelescopePromptBorder = "TelescopeBorder",
