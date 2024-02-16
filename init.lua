@@ -27,18 +27,18 @@ local keymaps = {
   { { "n", "v" }, "<C-d>", "<C-d>zz" }, { { "n", "v" }, "<C-u>", "<C-u>zz" },
   { { "n", "v" }, "<C-j>", "5j" }, { { "n", "v" }, "<C-k>", "5k" },
   { { "n", "v" }, "<C-h>", "B" }, { { "n", "v" }, "<C-l>", "W" },
-  { "i", ";;", "<Esc>A;<CR>"}, { "i", "..", "<Esc>Ea" }, { "i", ",,", "<Esc>Bi" },
-  { "i", "<<",    "<Esc>I"  }, { "i", ">>",    "<Esc>A"  },
+  { "i", ";;", "<Esc>A;<CR>"},
+  { "i", "<<",    "<Esc>Bi"  }, { "i", ">>",    "<Esc>Ea"  },
   { "i", "<C-,>", "<left>" },  { "i", "<C-.>", "<right>" },
   { "v", "<leader>y", [["+y]] },
   { "v", "<leader>r", "\"hy:%s/<C-r>h//g<left><left>" },
   { "v", "J", ":m '>+1<CR>gv=gv" }, { "v", "K", ":m '<-2<CR>gv=gv" },
   { "n", "X", [[:s/\([\[{(]\|,\)\|\([\]})]\)/\1\r\2<CR>==]] },
   -- autopairing symbols
-  { "i", "{ ", "{  }<left><left>" }, { "i", "{<CR>", "{<CR>}<Esc>O" },
-  { "i", "( ", "()<left>" },         { "i", "(<CR>", "(<CR>)<Esc>O" },
-  { "i", "[ ", "[]<left>" },         { "i", "[<CR>", "[<CR>]<Esc>O" },
-  { "i", '" ', '""<left>' },         { "i", "' ", "''<left>" },
+  { "i", "{<space>", "{}<left>" }, { "i", "{<CR>", "{<CR>}<Esc>O" },
+  { "i", "(<space>", "()<left>" }, { "i", "(<CR>", "(<CR>)<Esc>O" },
+  { "i", "[<space>", "[]<left>" }, { "i", "[<CR>", "[<CR>]<Esc>O" },
+  { "i", '"<space>', '""<left>' }, { "i", "' ", "''<left>" },
   { "i", "/* ","/**/<left><left>" }, { "i", "` ", "``<left>" },
   -- surrounding symbols
   { "v", "{}", "<Esc>`>a }<Esc>`<i{ <Esc>gv" },
@@ -58,13 +58,12 @@ local keymaps = {
   { "n", "<C-w>a",     [[<cmd>Alpha<CR>]] },
   { "n", "<C-/>",      [[<cmd>Lex<CR>]] },
   { "n", "<C-o>",      [[<cmd>lua require('oil').toggle_float()<CR>]]},
-  { { "n", "t" },      "<C-|>", [[<cmd>vsplit term://zsh<CR>i]] },
+  { { "n", "t" },      "<A-\\>", [[<cmd>vsplit term://zsh<CR>i]] },
   { { "n", "t" },      "<C-\\>", [[<cmd>lua require('FTerm').toggle()<CR>]] },
   { "t", "<Esc>",      [[<C-\><C-n>]] },
   { "t", "<C-c><C-c>", [[<C-c>exit<CR>]] },
   -- telescope
   { "n", "<C-p>",      ":Telescope find_files theme=dropdown layout_config={mirror=true}<CR>", "Find files" },
-  { "n", "<C-g>",      ":Telescope git_", "Git commands" },
   { "n", "<leader>fg", ":Telescope live_grep<CR>", "File grep" },
   { "n", "<leader>ff", ":Telescope find_files<CR>", "Find files" },
   { "n", "<leader>fb", ":Telescope buffers<CR>", "Opened buffers" },
@@ -74,6 +73,7 @@ local keymaps = {
   { "n", "<leader>fs", ":Telescope lsp_document_symbols<CR>", "LSP symbols" },
   { "n", "<leader>F",  ":Telescope resume<CR>", "Resume" },
   -- git
+  { "n", "<C-g>l", ":!lazygit<CR>", "Lazy git" },
   { "n", "<C-g>h", ":Gitsigns preview_hunk<CR>", "Preview hunk" },
   { "n", "<C-g>n", ":Gitsigns next_hunk<CR>", "Next hunk" },
   { "n", "<C-g>p", ":Gitsigns prev_hunk<CR>", "Prev hunk" },
@@ -85,7 +85,7 @@ local keymaps = {
 --[[ #lsp configurations ]]
 local lsp_configurations = {
   servers = { "lua_ls", "clangd", "tsserver", "rust_analyzer", "intelephense" },
-  cmpkeys = { Next="<Tab>", Prev="<S-Tab>", Abort="<C-c>", Confirm="<CR>" },
+  cmpkeys = { Next="<Tab>", Prev="<S-Tab>", Abort="<C-c>", Confirm="<space>" },
   lspkeys = { Hover="K", Signature="<A-k>", CodeAction="<leader>ca", Format="<leader>cf" },
 }
 
@@ -170,10 +170,10 @@ local icons = {
 
 --[[ #highlights ]]--
 local highlights = {
-  NormalNC = "Normal",
-  NormalFloat = "Normal",
-  FloatTitle = "Title",
-  FloatBorder = "Function",
+  --NormalNC = "Normal",
+  --NormalFloat = "Normal",
+  --FloatTitle = "Title",
+  --FloatBorder = "Function",
   TelescopeTitle = "FloatTitle",   TelescopeResultsTitle  = "TelescopeTitle",  TelescopePreviewTitle  = "TelescopeTitle",  TelescopePromptTitle  = "TelescopeTitle",
   TelescopeNormal = "NormalFloat", TelescopeResultsNormal = "TelescopeNormal", TelescopePreviewNormal = "TelescopeNormal", TelescopePromptNormal = "TelescopeNormal",
   TelescopeBorder = "FloatBorder", TelescopeResultsBorder = "TelescopeBorder", TelescopePreviewBorder = "TelescopeBorder", TelescopePromptBorder = "TelescopeBorder",
@@ -265,7 +265,10 @@ require"lazy".setup({
     }
   end },
   { "numToStr/FTerm.nvim", config = function ()
-    require"FTerm".setup { border = "rounded" }
+    require"FTerm".setup {
+      --border = "rounded",
+      hl = "Function",
+    }
   end },
   { "lewis6991/gitsigns.nvim", config = function ()
     require"gitsigns".setup {
