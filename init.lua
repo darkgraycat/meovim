@@ -17,7 +17,7 @@ local meovim = {
   [[                    ░▒▒░░▒▒░▒░                    ]],
 }
 --[[ #colorscheme ]]--
-local colorscheme = "horizon"
+local colorscheme = "nordic"
 
 --[[ #keymaps ]]--
 local keymaps = {
@@ -57,10 +57,10 @@ local keymaps = {
   -- gui control
   { "n", "<C-w>a",     [[<cmd>Alpha<CR>]] },
   { "n", "<C-/>",      [[<cmd>Lex<CR>]] },
-  { "n", "<C-o>",      [[<cmd>lua require('oil').toggle_float()<CR>]]},
-  { { "n", "t" },      "<A-\\>", [[<cmd>vsplit term://zsh<CR>i]] },
-  { { "n", "t" },      "<C-\\>", [[<cmd>lua require('FTerm').toggle()<CR>]] },
-  { "t", "<Esc><Esc>",      [[<C-\><C-n>]] },
+  { "n", "<C-o>",      [[<cmd>lua require'oil'.toggle_float()<CR>]]},
+  { { "n", "t" }, "<A-\\>", [[<cmd>vsplit term://zsh<CR>i]] },
+  { { "n", "t" }, "<C-\\>", [[<cmd>lua require'FTerm'.toggle()<CR>]] },
+  { "t", "<Esc><Esc>", [[<C-\><C-n>]] },
   { "t", "<C-c><C-c>", [[<C-c>exit<CR>]] },
   -- telescope
   { "n", "<C-p>",      ":Telescope find_files theme=dropdown layout_config={mirror=true}<CR>", "Find files" },
@@ -73,7 +73,7 @@ local keymaps = {
   { "n", "<leader>fs", ":Telescope lsp_document_symbols<CR>", "LSP symbols" },
   { "n", "<leader>F",  ":Telescope resume<CR>", "Resume" },
   -- git
-  { "n", "<C-g>l", ":!lazygit<CR>", "Lazy git" },
+  { "n", "<C-g>g", [[<cmd>lua require'FTerm'.run'lazygit'<CR>]], "Lazy git" },
   { "n", "<C-g>h", ":Gitsigns preview_hunk<CR>", "Preview hunk" },
   { "n", "<C-g>n", ":Gitsigns next_hunk<CR>", "Next hunk" },
   { "n", "<C-g>p", ":Gitsigns prev_hunk<CR>", "Prev hunk" },
@@ -268,7 +268,7 @@ require"lazy".setup({
   end },
   { "numToStr/FTerm.nvim", config = function ()
     require"FTerm".setup {
-      --border = "rounded",
+      border = "rounded",
       hl = "Function",
     }
   end },
