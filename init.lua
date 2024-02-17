@@ -17,7 +17,7 @@ local meovim = {
   [[                    ░▒▒░░▒▒░▒░                    ]],
 }
 --[[ #colorscheme ]]--
-local colorscheme = "nordic"
+local colorscheme = "horizon"
 
 --[[ #keymaps ]]--
 local keymaps = {
@@ -52,8 +52,8 @@ local keymaps = {
   { "n", "d§",       ":<C-U>bprevious <bar> bdelete #<CR>" },
   { "n", "<A-=>",    ":tabnew<CR>"},  { "n", "d=",    ":tabclose<CR>"},
   { "n", "<A-]>",    ":tabnext<CR>"}, { "n", "<A-[>", ":tabprevious<CR>"},
-  { "n", "<A-Left>", ":vertical resize +4<CR>"},   { "n", "<A-Right>", ":vertical resize -4<CR>"},
-  { "n", "<A-Down>", ":horizontal resize +4<CR>"}, { "n", "<A-Up>",    ":horizontal resize -4<CR>"},
+  { "n", "<A-left>", ":vertical resize +4<CR>"},   { "n", "<A-right>", ":vertical resize -4<CR>"},
+  { "n", "<A-down>", ":horizontal resize +4<CR>"}, { "n", "<A-up>",    ":horizontal resize -4<CR>"},
   -- gui control
   { "n", "<C-w>a",     [[<cmd>Alpha<CR>]] },
   { "n", "<C-/>",      [[<cmd>Lex<CR>]] },
@@ -249,7 +249,7 @@ require"lazy".setup({
         lualine_x = { "encoding" },         lualine_y = { "filetype" },            lualine_z = { "selectioncount", "progress" },
       },
       tabline = {
-        lualine_a = { { "buffers", max_length = vim.o.columns * 0.8 } },
+        lualine_a = { { "buffers", max_length = vim.o.columns * 0.9 } },
         lualine_x = { "branch" }, lualine_z = { "tabs" },
       },
     }
