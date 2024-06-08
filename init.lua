@@ -49,9 +49,11 @@ local globals = {
 --[[ #options ]]----------------------------------------------------------------
 local options = {
     -- indent --
+    shiftwidth = 2,
+    tabstop = 2,
+    softtabstop = 2,
     autoindent = true, smartindent = true,
-    shiftround = true, shiftwidth = 4,
-    expandtab = true, tabstop = 4, softtabstop = 4,
+    shiftround = true, expandtab = true,
     wrap = false, list = true,
     listchars = [[multispace:· ,tab:⬄  ,]],
     -- fold --
@@ -167,6 +169,7 @@ vim.cmd[[
     inoremap <A-CR> <CR><Esc>O
     inoremap <A-BS> <Right><BS>
     inoremap <expr> <CR> getline('.')[col('.')-2]=~'[\(\{\[]' ? '<CR><Esc>O' : '<CR>'
+    inoremap <expr> <BS> (getline('.')[col('.')-2:col('.')-1]=~#'\v(''''\|""\|[]\|\{\}\|\(\))') ? '<BS><Del>' : '<BS>'
     nnoremap <expr> gcc getline('.')[match(getline('.'),'\S'):match(getline('.'),'\S')+2]==#'// ' ? '^df ' : '^i// <Esc>'
     map <C-z> <Nop>
     map q: <Nop>
@@ -405,11 +408,15 @@ require"lazy".setup {
     { "goolord/alpha-nvim", config = function ()
         local alpha_th = require"alpha.themes.theta"
         local alpha_db = require"alpha.themes.dashboard"
-        local alpha_time = tostring(os.date("%A %I:%M %p"))
+        local alpha_time = "  "..tostring(os.date("%A %I:%M %p"))
+        -- local menu_border_top = "╭─"..string.rep("─", 46 - string.len(alpha_time))..alpha_time.."─╮"
+        -- local menu_border_bot = "╰─"..string.rep("─", 46).."─╯"
+        local menu_border_top = "────"..string.rep("─", 46 - string.len(alpha_time))..alpha_time
+        local menu_border_bot = ""
         alpha_th.header.val = meovim
         alpha_th.header.opts.hl = "Title"
         alpha_th.buttons.val = {
-            { type = "text", val = "╭"..string.rep("─", 47 - string.len(alpha_time))..alpha_time.."─╮", opts = { hl = "FloatBorder", position = "center" } },
+            { type = "text", val = menu_border_top, opts = { hl = "FloatBorder", position = "center" } },
             alpha_db.button("e", icons.dashboard.NewFile        .. "  New file",        ":ene <BAR> startinsert <CR>"),
             alpha_db.button("f", icons.dashboard.FindFile       .. "  Find file",       ":Telescope find_files <CR>"),
             alpha_db.button("g", icons.dashboard.FindText       .. "  Find text",       ":Telescope live_grep <CR>"),
@@ -418,10 +425,14 @@ require"lazy".setup {
             alpha_db.button("t", icons.dashboard.Terminal       .. "  Terminal",        ":lua require'FTerm'.toggle()<CR>"),
             alpha_db.button("c", icons.dashboard.Colors         .. "  Colorscheme",     ":Telescope colorscheme<CR>"),
             alpha_db.button("q", icons.dashboard.Quit           .. "  Quit",            ":qa<CR>"),
-            { type = "text", val = "╰"..string.rep("─", 48).."╯", opts = { hl = "FloatBorder", position = "center" } },
+            { type = "text", val = menu_border_bot, opts = { hl = "FloatBorder", position = "center" } },
         }
         require"alpha".setup(alpha_th.config)
     end },
+    -- plugins@venn
+    { "jbyuki/venn.nvim", config = function ()
+    end },
+
     -- plugins@colorschemes
     { "folke/tokyonight.nvim", name = "tokyonight" },
     { "akinsho/horizon.nvim", name = "horizon" },
