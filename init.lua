@@ -1,6 +1,7 @@
 -- TODO:
 -- backup current file [v]
 -- Finish lazygit setup
+-- Learn how to integrate terminal tools (ranger, lazygit) with vim
 --
 -- I think we can have general serializable config for plugins as well
 -- like I did for statusline style
