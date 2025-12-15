@@ -118,6 +118,7 @@ function! Session(mode)
 endfunction
 
 function! NoneBG()
+    hi NonText guibg=None
     hi Normal guibg=None
     hi LineNr guibg=None
     hi VertSplit guibg=None
@@ -168,5 +169,5 @@ command! -nargs=1 MVYankCmd       let @+=system('<args>')
 command! -nargs=1 MVSession       call Session('<args>')
 command! -nargs=0 MVNoneBG        call NoneBG()
 
-colorscheme tokyo-night
+colorscheme slate
 finish
